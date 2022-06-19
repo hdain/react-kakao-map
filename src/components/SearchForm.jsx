@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 
 const Form = styled.form`
@@ -24,9 +24,7 @@ const Button = styled.button`
   font-size: 25px;
 `;
 
-const SearchForm = ({ setSearch }) => {
-  const [text, setText] = useState("");
-
+const SearchForm = ({ setSearch, text, setText }) => {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -35,9 +33,12 @@ const SearchForm = ({ setSearch }) => {
     [setSearch, text]
   );
 
-  const handleChange = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
+  const handleChange = useCallback(
+    (e) => {
+      setText(e.target.value);
+    },
+    [setText]
+  );
 
   return (
     <Form onSubmit={handleSubmit}>

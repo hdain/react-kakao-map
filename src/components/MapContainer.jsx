@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import getMap from "../api/getMap";
 
 const Map = styled.div`
   margin-top: 30px;
@@ -7,7 +8,7 @@ const Map = styled.div`
   height: 50vh;
 `;
 
-const MapContainer = ({ search }) => {
+const MapContainer = ({ search, setSearch, setText }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -16,58 +17,11 @@ const MapContainer = ({ search }) => {
     document.head.appendChild(script);
 
     script.onload = () => {
-      window.kakao.maps.load(() => {
-        if (mapRef.current) {
-          const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-
-          const options = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3,
-          };
-
-          const map = new window.kakao.maps.Map(mapRef.current, options);
-
-          if (search !== "") {
-            const ps = new window.kakao.maps.services.Places();
-            ps.keywordSearch(search, placesSearchCB);
-
-            function placesSearchCB(data, status, pagination) {
-              if (status === window.kakao.maps.services.Status.OK) {
-                const bounds = new window.kakao.maps.LatLngBounds();
-
-                for (let i = 0; i < data.length; i++) {
-                  displayMarker(data[i]);
-                  bounds.extend(
-                    new window.kakao.maps.LatLng(data[i].y, data[i].x)
-                  );
-                }
-
-                map.setBounds(bounds);
-              }
-            }
-
-            function displayMarker(place) {
-              const marker = new window.kakao.maps.Marker({
-                map: map,
-                position: new window.kakao.maps.LatLng(place.y, place.x),
-              });
-
-              window.kakao.maps.event.addListener(marker, "click", function () {
-                infowindow.setContent(
-                  '<div style="padding:5px;font-size:12px;">' +
-                    place.place_name +
-                    "</div>"
-                );
-                infowindow.open(map, marker);
-              });
-            }
-          }
-        }
-      });
+      getMap(mapRef, search, setSearch, setText);
     };
 
     return () => script.remove();
-  }, [search]);
+  }, [search, setSearch, setText]);
 
   return <Map id="map" ref={mapRef}></Map>;
 };

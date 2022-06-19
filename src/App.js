@@ -20,12 +20,13 @@ const Inner = styled.div`
 
 const App = () => {
   const [search, setSearch] = useState("");
+  const [text, setText] = useState("");
 
   return (
     <div>
       <Inner>
-        <SearchInput setSearch={setSearch} />
-        <MapContainer search={search} />
+        <SearchInput setSearch={setSearch} text={text} setText={setText} />
+        <MapContainer search={search} setSearch={setSearch} setText={setText} />
       </Inner>
     </div>
   );
