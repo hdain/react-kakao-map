@@ -1,4 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
+
+const Map = styled.div`
+  margin-top: 30px;
+  width: 100%;
+  height: 50vh;
+`;
 
 const MapContainer = () => {
   const mapRef = useRef(null);
@@ -24,13 +31,7 @@ const MapContainer = () => {
     return () => script.remove();
   }, []);
 
-  return (
-    <div
-      id="map"
-      ref={mapRef}
-      style={{ width: "500px", height: "500px" }}
-    ></div>
-  );
+  return <Map id="map" ref={mapRef}></Map>;
 };
 
 export default MapContainer;
