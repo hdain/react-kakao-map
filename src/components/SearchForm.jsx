@@ -2,7 +2,13 @@ import React, { useCallback } from "react";
 import styled from "styled-components";
 
 const Form = styled.form`
-  position: relative;
+  position: fixed;
+  z-index: 2;
+  top: 20px;
+  left: 50%;
+  max-width: 700px;
+  width: 90%;
+  transform: translateX(-50%);
 `;
 
 const Input = styled.input`
@@ -11,7 +17,7 @@ const Input = styled.input`
   padding: 10px 15px;
   box-sizing: border-box;
   border: 1px solid #777;
-  border-radius: 3px;
+  border-radius: 5px;
 `;
 
 const Button = styled.button`
@@ -22,6 +28,7 @@ const Button = styled.button`
   background: none;
   border: none;
   font-size: 25px;
+  cursor: pointer;
 `;
 
 const SearchForm = ({ setSearch, text, setText }) => {

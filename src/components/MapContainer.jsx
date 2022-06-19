@@ -3,9 +3,8 @@ import styled from "styled-components";
 import getMap from "../api/getMap";
 
 const Map = styled.div`
-  margin-top: 30px;
   width: 100%;
-  height: 50vh;
+  height: 100%;
 `;
 
 const MapContainer = ({ search, setSearch, setText }) => {
