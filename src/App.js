@@ -1,6 +1,7 @@
 import MapContainer from "./components/MapContainer";
 import SearchInput from "./components/SearchForm";
 import styled from "styled-components";
+import { useState } from "react";
 
 const Inner = styled.div`
   max-width: 50vw;
@@ -18,11 +19,13 @@ const Inner = styled.div`
 `;
 
 const App = () => {
+  const [search, setSearch] = useState("");
+
   return (
     <div>
       <Inner>
-        <SearchInput />
-        <MapContainer />
+        <SearchInput setSearch={setSearch} />
+        <MapContainer search={search} />
       </Inner>
     </div>
   );

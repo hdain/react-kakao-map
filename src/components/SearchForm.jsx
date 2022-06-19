@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
 const Form = styled.form`
@@ -24,10 +24,29 @@ const Button = styled.button`
   font-size: 25px;
 `;
 
-const SearchForm = () => {
+const SearchForm = ({ setSearch }) => {
+  const [text, setText] = useState("");
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      setSearch(text);
+    },
+    [setSearch, text]
+  );
+
+  const handleChange = useCallback((e) => {
+    setText(e.target.value);
+  }, []);
+
   return (
-    <Form>
-      <Input type="text" placeholder="검색어를 입력해주세요" />
+    <Form onSubmit={handleSubmit}>
+      <Input
+        type="text"
+        value={text}
+        onChange={handleChange}
+        placeholder="검색어를 입력해주세요"
+      />
       <Button type="submit">🔍</Button>
     </Form>
   );
