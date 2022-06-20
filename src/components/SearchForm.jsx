@@ -1,5 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
+import { getSearchMap } from "../api/getMap";
+import { MapContext } from "./MapContainer";
 
 const Form = styled.form`
   position: fixed;
@@ -31,27 +33,30 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const SearchForm = ({ setSearch, text, setText }) => {
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      setSearch(text);
-    },
-    [setSearch, text]
-  );
+const SearchForm = () => {
+  const map = useContext(MapContext);
+  const [search, setSearch] = useState("");
 
   const handleChange = useCallback(
     (e) => {
-      setText(e.target.value);
+      setSearch(e.target.value);
     },
-    [setText]
+    [setSearch]
+  );
+
+  const handleSubmit = useCallback(
+    (e) => {
+      getSearchMap(map, search, setSearch);
+      e.preventDefault();
+    },
+    [map, search, setSearch]
   );
 
   return (
     <Form onSubmit={handleSubmit}>
       <Input
         type="text"
-        value={text}
+        value={search}
         onChange={handleChange}
         placeholder="검색어를 입력해주세요"
       />

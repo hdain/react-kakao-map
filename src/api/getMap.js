@@ -1,4 +1,15 @@
-const getSearchMap = (map, search, setSearch, setText) => {
+export const zoomIn = (map) => {
+  const level = map.getLevel();
+  map.setLevel(level - 1);
+};
+
+export const zoomOut = (map) => {
+  const level = map.getLevel();
+  map.setLevel(level + 1);
+};
+
+export const getSearchMap = (map, search, setSearch) => {
+  if (search === "") return;
   const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(search, placesSearchCB);
@@ -15,7 +26,6 @@ const getSearchMap = (map, search, setSearch, setText) => {
       map.setBounds(bounds);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       setSearch("");
-      setText("");
       alert("검색 결과가 존재하지 않습니다.");
     }
   }
@@ -40,28 +50,3 @@ const getSearchMap = (map, search, setSearch, setText) => {
     });
   }
 };
-
-const getMap = (mapRef, search, setSearch, setText) => {
-  window.kakao.maps.load(() => {
-    if (mapRef.current) {
-      const options = {
-        center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
-      };
-
-      const map = new window.kakao.maps.Map(mapRef.current, options);
-
-      const zoomControl = new window.kakao.maps.ZoomControl();
-      map.addControl(
-        zoomControl,
-        window.kakao.maps.ControlPosition.BOTTOMRIGHT
-      );
-
-      if (search !== "") {
-        getSearchMap(map, search, setSearch, setText);
-      }
-    }
-  });
-};
-
-export default getMap;
