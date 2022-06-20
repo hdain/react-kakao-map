@@ -8,6 +8,26 @@ export const zoomOut = (map) => {
   map.setLevel(level + 1);
 };
 
+export const setOverlayMapTypeId = (map, maptype, option) => {
+  if (option === "add") {
+    if (maptype === "traffic") {
+      map.addOverlayMapTypeId(window.kakao.maps.MapTypeId.TRAFFIC);
+    } else if (maptype === "bicycle") {
+      map.addOverlayMapTypeId(window.kakao.maps.MapTypeId.BICYCLE);
+    } else {
+      map.addOverlayMapTypeId(window.kakao.maps.MapTypeId.TERRAIN);
+    }
+  } else {
+    if (maptype === "traffic") {
+      map.removeOverlayMapTypeId(window.kakao.maps.MapTypeId.TRAFFIC);
+    } else if (maptype === "bicycle") {
+      map.removeOverlayMapTypeId(window.kakao.maps.MapTypeId.BICYCLE);
+    } else {
+      map.removeOverlayMapTypeId(window.kakao.maps.MapTypeId.TERRAIN);
+    }
+  }
+};
+
 export const getSearchMap = (map, search, setSearch) => {
   if (search === "") return;
   const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
