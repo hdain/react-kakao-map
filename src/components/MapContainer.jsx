@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, createContext } from "react";
 import styled from "styled-components";
-import getMap from "../api/getMap";
-import MapTypeButtons from "./MapTypeButtons";
+import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
 import SearchForm from "./SearchForm";
 
@@ -10,6 +9,14 @@ export const MapContext = createContext();
 const Map = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const MapControlView = styled.div`
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 50px;
+  z-index: 2;
 `;
 
 const MapContainer = () => {
@@ -43,8 +50,10 @@ const MapContainer = () => {
       <Map id="map" ref={mapRef}></Map>
       <MapContext.Provider value={map}>
         <SearchForm />
-        <MapTypeButtons />
-        <MapZoomControl />
+        <MapControlView>
+          <MapTypeControl />
+          <MapZoomControl />
+        </MapControlView>
       </MapContext.Provider>
     </>
   );
