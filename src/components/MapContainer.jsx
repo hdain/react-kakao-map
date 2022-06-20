@@ -32,7 +32,10 @@ const MapContainer = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           const options = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+            center: new window.kakao.maps.LatLng(
+              37.39525750009229,
+              127.11148651523494
+            ),
             level: 3,
           };
 

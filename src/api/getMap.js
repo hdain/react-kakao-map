@@ -30,7 +30,6 @@ export const setOverlayMapTypeId = (map, maptype, option) => {
 
 export const getSearchMap = (map, search, setSearch) => {
   if (search === "") return;
-  const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(search, placesSearchCB);
 
@@ -56,17 +55,31 @@ export const getSearchMap = (map, search, setSearch) => {
       position: new window.kakao.maps.LatLng(place.y, place.x),
     });
 
-    window.kakao.maps.event.addListener(marker, "click", function () {
-      infowindow.setContent(
-        '<div style="padding:5px;font-size:12px;line-height:1.4;">' +
-          place.place_name +
-          "<br />" +
-          place.road_address_name +
-          "</div>"
-      );
-      infowindow.open(map, marker);
-      map.panTo(new window.kakao.maps.LatLng(place.y, place.x));
-      console.log(place.y, place.x);
+    const content = `
+    <div class="info-window">
+      <button>✕</button>
+      <div class="content">
+        <strong class="title">
+          ${place.place_name}
+          <span class="category">${place.category_group_name}</span>
+        </strong>
+        <p class="road-address">${place.road_address_name}</p>
+        <p class="address">(지번) ${place.address_name}</p>
+        <p class="phone">${place.phone}</p>
+      </div>
+    </div>
+    `;
+
+    const overlay = new window.kakao.maps.CustomOverlay({
+      content: content,
+      map: map,
+      position: marker.getPosition(),
+    });
+
+    overlay.setMap(null);
+
+    window.kakao.maps.event.addListener(marker, "click", () => {
+      overlay.setMap(map);
     });
   }
 };
