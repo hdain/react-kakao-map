@@ -1,3 +1,5 @@
+import getOverlayContent from "../utils/getOverlayContent";
+
 export const zoomIn = (map) => {
   const level = map.getLevel();
   map.setLevel(level - 1);
@@ -55,23 +57,12 @@ export const getSearchMap = (map, search, setSearch) => {
       position: new window.kakao.maps.LatLng(place.y, place.x),
     });
 
-    const content = `
-    <div class="info-window">
-      <button>✕</button>
-      <div class="content">
-        <strong class="title">
-          ${place.place_name}
-          <span class="category">${place.category_group_name}</span>
-        </strong>
-        <p class="road-address">${place.road_address_name}</p>
-        <p class="address">(지번) ${place.address_name}</p>
-        <p class="phone">${place.phone}</p>
-      </div>
-    </div>
-    `;
+    const closeOverlay = () => {
+      overlay.setMap(null);
+    };
 
     const overlay = new window.kakao.maps.CustomOverlay({
-      content: content,
+      content: getOverlayContent(place, closeOverlay),
       map: map,
       position: marker.getPosition(),
     });
