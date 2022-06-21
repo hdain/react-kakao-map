@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# 🗺 react-kakao-map
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- 카카오맵 api 를 이용한 지도 구현
 
-## Available Scripts
+## Stacks
 
-In the project directory, you can run:
+- <img src="https://img.shields.io/badge/React-61DAFB?style=flatgit&logo=React&logoColor=white"/>
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- useContext 를 사용하여 지도 상태 전역 관리
+- 키워드를 통해 장소 검색 구현
+- 검색 결과 지도에 마커로 표시
+- 마커 클릭 시
+  - 지도 화면 중심좌표로 이동
+  - 오버레이를 통해 해당 장소 기본 정보 표시
+- 지도 줌 인/아웃 버튼 구현
+- 지도 타입 변경 (자전거 도로, 교통정보, 지형도) 구현
+- mkcert 를 이용해 https 설정
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  - Localhost ‘http -> https’ 로 변경하는 방법
+    1. 설치<br/>
+    ```
+    brew install mkcert
+    brew install css (only needed firefox)
+    ```
+    2. 프로젝트 최상단에서
+    ```
+    mkcert -install
+    ```
+    3. 인증서 폴더 및 파일 생성 (.gitignore 추가할 것)
+    ```
+    mkdir -p .cert
+    Mkcert -key-file ./.cert/key.pem -cert-file ./.cert-cert.pem ‘localhost’
+    ```
+    5. package.json -> ‘scripts’ 수정
+    ```
+    "start": "HTTPS=true SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem react-scripts start",
+    ```
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 현재위치 기반 지도 설정 (구현중 ..!)

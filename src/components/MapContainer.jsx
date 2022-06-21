@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, createContext } from "react";
 import styled from "styled-components";
-import getGeolocation from "../utils/getGeolocation";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
 import SearchForm from "./SearchForm";
@@ -32,7 +31,6 @@ const MapContainer = () => {
     script.onload = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
-          getGeolocation();
           const options = {
             center: new window.kakao.maps.LatLng(
               37.39525750009229,
