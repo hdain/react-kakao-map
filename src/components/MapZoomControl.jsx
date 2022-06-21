@@ -7,19 +7,20 @@ import { MapContext } from "./MapContainer";
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #777;
   border-radius: 5px;
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 15px;
 `;
 
 const Button = styled.button`
   border: none;
-  background: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
   height: 50px;
   cursor: pointer;
   &:first-child {
-    border-bottom: 1px solid #bbb;
+    margin-bottom: 6px;
   }
 `;
 
