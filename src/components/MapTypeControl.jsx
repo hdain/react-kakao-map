@@ -5,6 +5,7 @@ import { BiLandscape } from "react-icons/bi";
 import { BsBicycle } from "react-icons/bs";
 import { MapContext } from "./MapContainer";
 import { setOverlayMapTypeId } from "../api/getMap";
+import MapTypeControlButton from "./MapTypeControlButton";
 
 const Wrap = styled.div`
   display: flex;
@@ -12,19 +13,6 @@ const Wrap = styled.div`
   border: 1px solid #777;
   border-radius: 5px;
   overflow: hidden;
-`;
-
-const Button = styled.button`
-  border: none;
-  background: #fff;
-  padding: 0;
-  height: 50px;
-  font-size: 25px;
-  cursor: pointer;
-  border-bottom: 1px solid #bbb;
-  &:last-child {
-    border-bottom: none;
-  }
 `;
 
 const list = [
@@ -62,9 +50,11 @@ const MapTypeControl = () => {
   return (
     <Wrap>
       {list.map((button) => (
-        <Button key={button.type} onClick={() => handleTypeChange(button.type)}>
-          <button.icon />
-        </Button>
+        <MapTypeControlButton
+          key={button.type}
+          button={button}
+          handleTypeChange={handleTypeChange}
+        />
       ))}
     </Wrap>
   );
