@@ -32,23 +32,37 @@ export const setOverlayMapTypeId = (map, maptype, option) => {
 
 export const getSearchMap = (map, search, setSearch) => {
   if (search === "") return;
+  const markers = [];
+  const overlay = new window.kakao.maps.CustomOverlay({ zIndex: 1 });
+  overlay.setMap(null);
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(search, placesSearchCB);
 
   function placesSearchCB(data, status) {
     if (status === window.kakao.maps.services.Status.OK) {
-      const bounds = new window.kakao.maps.LatLngBounds();
-
-      for (let i = 0; i < data.length; i++) {
-        displayMarker(data[i]);
-        bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
-      }
-
-      map.setBounds(bounds);
+      displayPlace(data);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       setSearch("");
       alert("검색 결과가 존재하지 않습니다.");
     }
+  }
+
+  function displayPlace(place) {
+    const bounds = new window.kakao.maps.LatLngBounds();
+
+    for (let i = 0; i < place.length; i++) {
+      const marker = displayMarker(place[i]);
+      bounds.extend(new window.kakao.maps.LatLng(place[i].y, place[i].x));
+
+      (function (marker, place) {
+        window.kakao.maps.event.addListener(marker, "click", () => {
+          displayPlaceInfo(place);
+          map.panTo(new window.kakao.maps.LatLng(place.y, place.x));
+        });
+      })(marker, place[i]);
+    }
+
+    map.setBounds(bounds);
   }
 
   function displayMarker(place) {
@@ -57,20 +71,23 @@ export const getSearchMap = (map, search, setSearch) => {
       position: new window.kakao.maps.LatLng(place.y, place.x),
     });
 
+    markers.push(marker);
+
+    return marker;
+  }
+
+  function displayPlaceInfo(place) {
     const closeOverlay = () => {
       overlay.setMap(null);
     };
 
-    const overlay = new window.kakao.maps.CustomOverlay({
-      content: getOverlayContent(place, closeOverlay),
-      map: map,
-      position: marker.getPosition(),
-    });
+    const content = getOverlayContent(place, closeOverlay);
+    const position = new window.kakao.maps.LatLng(place.y, place.x);
 
-    overlay.setMap(null);
+    overlay.setContent(content);
+    overlay.setMap(map);
+    overlay.setPosition(position);
 
-    window.kakao.maps.event.addListener(marker, "click", () => {
-      overlay.setMap(map);
-    });
+    overlay.setMap(map);
   }
 };
