@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import getMap from "../api/getMap";
+import getGeolocation from "../utils/getGeolocation";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
 import SearchForm from "./SearchForm";
@@ -30,7 +31,26 @@ const MapContainer = () => {
   const mapRef = useRef(null);
   const [map, setMap] = useState();
   const [overlay, setOverlay] = useState();
+  const [location, setLocation] = useState({
+    latitude: 37.39525750009229,
+    longitude: 127.11148651523494,
+  });
   const value = useMemo(() => ({ map, overlay }), [map, overlay]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      const data = async () => {
+        const position = await getGeolocation();
+        console.log(position);
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      };
+
+      data();
+    }
+  }, []);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -40,14 +60,15 @@ const MapContainer = () => {
     script.onload = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
-          getMap(setMap, mapRef);
+          getMap(setMap, mapRef, location);
           setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
         }
       });
     };
+    console.log("render");
 
     return () => script.remove();
-  }, []);
+  }, [location]);
 
   return (
     <>

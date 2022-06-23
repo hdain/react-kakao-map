@@ -97,9 +97,9 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
   }
 };
 
-const getMap = (setMap, mapRef) => {
+const getMap = (setMap, mapRef, location) => {
   const options = {
-    center: new window.kakao.maps.LatLng(37.39525750009229, 127.11148651523494),
+    center: new window.kakao.maps.LatLng(location.latitude, location.longitude),
     level: 3,
   };
 

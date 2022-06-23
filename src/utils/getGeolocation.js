@@ -1,10 +1,12 @@
 const getGeolocation = () => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position);
-    return {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    };
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 30000,
+  };
+
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
 
