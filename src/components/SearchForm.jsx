@@ -34,7 +34,7 @@ const Button = styled.button`
 `;
 
 const SearchForm = () => {
-  const map = useContext(MapContext);
+  const { map, overlay } = useContext(MapContext);
   const [search, setSearch] = useState("");
 
   const handleChange = useCallback(
@@ -46,10 +46,11 @@ const SearchForm = () => {
 
   const handleSubmit = useCallback(
     (e) => {
-      getSearchMap(map, search, setSearch);
+      overlay.setMap(null);
+      getSearchMap(map, overlay, search, setSearch);
       e.preventDefault();
     },
-    [map, search, setSearch]
+    [map, overlay, search, setSearch]
   );
 
   return (

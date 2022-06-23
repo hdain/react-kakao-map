@@ -1,10 +1,17 @@
-import React, { useState, useEffect, useRef, createContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  createContext,
+  useMemo,
+} from "react";
 import styled from "styled-components";
+import getMap from "../api/getMap";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
 import SearchForm from "./SearchForm";
 
-export const MapContext = createContext();
+export const MapContext = createContext({ map: {}, overlay: {} });
 
 const Map = styled.div`
   width: 100%;
@@ -22,6 +29,8 @@ const MapControlView = styled.div`
 const MapContainer = () => {
   const mapRef = useRef(null);
   const [map, setMap] = useState();
+  const [overlay, setOverlay] = useState();
+  const value = useMemo(() => ({ map, overlay }), [map, overlay]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -31,16 +40,8 @@ const MapContainer = () => {
     script.onload = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
-          const options = {
-            center: new window.kakao.maps.LatLng(
-              37.39525750009229,
-              127.11148651523494
-            ),
-            level: 3,
-          };
-
-          const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
-          setMap(kakaoMap);
+          getMap(setMap, mapRef);
+          setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
         }
       });
     };
@@ -51,7 +52,7 @@ const MapContainer = () => {
   return (
     <>
       <Map id="map" ref={mapRef}></Map>
-      <MapContext.Provider value={map}>
+      <MapContext.Provider value={value}>
         <SearchForm />
         <MapControlView>
           <MapTypeControl />

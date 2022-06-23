@@ -32,11 +32,9 @@ export const setOverlayMapTypeId = (map, maptype, option) => {
 
 const markers = [];
 
-export const getSearchMap = (map, search, setSearch) => {
+export const getSearchMap = (map, overlay, search, setSearch) => {
   if (search === "") return;
   removeMarker();
-  const overlay = new window.kakao.maps.CustomOverlay({ zIndex: 1 });
-  overlay.setMap(null);
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(search, placesSearchCB);
 
@@ -98,3 +96,15 @@ export const getSearchMap = (map, search, setSearch) => {
     overlay.setPosition(position);
   }
 };
+
+const getMap = (setMap, mapRef) => {
+  const options = {
+    center: new window.kakao.maps.LatLng(37.39525750009229, 127.11148651523494),
+    level: 3,
+  };
+
+  const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
+  setMap(kakaoMap);
+};
+
+export default getMap;
