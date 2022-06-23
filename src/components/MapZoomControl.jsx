@@ -25,7 +25,7 @@ const Button = styled.button`
 `;
 
 const MapZoomControl = () => {
-  const map = useContext(MapContext);
+  const { map } = useContext(MapContext);
 
   const handleZoomIn = useCallback(() => {
     zoomIn(map);

@@ -31,7 +31,7 @@ const list = [
 ];
 
 const MapTypeControl = () => {
-  const map = useContext(MapContext);
+  const { map } = useContext(MapContext);
   const [type, setType] = useState([]);
 
   const handleTypeChange = useCallback(
