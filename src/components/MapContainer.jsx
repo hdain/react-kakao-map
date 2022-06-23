@@ -8,6 +8,7 @@ import React, {
 import styled from "styled-components";
 import getMap from "../api/getMap";
 import getGeolocation from "../utils/getGeolocation";
+import Loader from "./Loader";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
 import SearchForm from "./SearchForm";
@@ -30,27 +31,9 @@ const MapControlView = styled.div`
 const MapContainer = () => {
   const mapRef = useRef(null);
   const [map, setMap] = useState();
+  const [loading, setLoading] = useState(false);
   const [overlay, setOverlay] = useState();
-  const [location, setLocation] = useState({
-    latitude: 37.39525750009229,
-    longitude: 127.11148651523494,
-  });
   const value = useMemo(() => ({ map, overlay }), [map, overlay]);
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      const data = async () => {
-        const position = await getGeolocation();
-        console.log(position);
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      };
-
-      data();
-    }
-  }, []);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -58,20 +41,32 @@ const MapContainer = () => {
     document.head.appendChild(script);
 
     script.onload = () => {
+      setLoading(true);
       window.kakao.maps.load(() => {
         if (mapRef.current) {
-          getMap(setMap, mapRef, location);
-          setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
+          const data = async () => {
+            const position = await getGeolocation();
+            const location = {
+              latitude: position.latitude,
+              longitude: position.longitude,
+            };
+
+            getMap(setMap, mapRef, location);
+            setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
+            setLoading(false);
+          };
+
+          data();
         }
       });
     };
-    console.log("render");
 
     return () => script.remove();
-  }, [location]);
+  }, []);
 
   return (
     <>
+      {loading ? <Loader /> : ""}
       <Map id="map" ref={mapRef}></Map>
       <MapContext.Provider value={value}>
         <SearchForm />

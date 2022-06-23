@@ -6,7 +6,24 @@ const getGeolocation = () => {
   };
 
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error(error);
+          resolve({
+            latitude: 37.39525750009229,
+            longitude: 127.11148651523494,
+          });
+        },
+        options
+      );
+    }
   });
 };
 
