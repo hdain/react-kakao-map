@@ -1,5 +1,5 @@
 // 문자열이 아닌 DOM API로 Element를 직접 생성하여 구성해야 함
-const getOverlayContent = (place, closeOverlay) => {
+const getOverlayContent = (place, closeOverlay, length) => {
   const content = document.createElement("div");
   content.className = "info-window";
   const closeBtn = document.createElement("button");
@@ -21,12 +21,19 @@ const getOverlayContent = (place, closeOverlay) => {
   const address = document.createElement("p");
   address.className = "address";
   address.append(place.address_name);
-  const phone = document.createElement("p");
+  const distance = document.createElement("span");
+  distance.className = "distance";
+  distance.append(length + "m");
+  const phone = document.createElement("span");
   phone.className = "phone";
   phone.append(place.phone);
-  inner.append(title, roadAddress, address, phone);
+  const etc = document.createElement("p");
+  etc.className = "etc";
+  etc.append(distance, phone);
+  inner.append(title, roadAddress, address, etc);
   content.append(closeBtn, inner);
 
   return content;
 };
+
 export default getOverlayContent;

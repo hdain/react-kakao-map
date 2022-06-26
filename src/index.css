@@ -82,6 +82,10 @@ body {
   color: #999;
 }
 
-.info-window .content .phone {
+.info-window .content .etc .distance {
+  margin-right: 7px;
+}
+
+.info-window .content .etc .phone {
   color: #288833;
 }

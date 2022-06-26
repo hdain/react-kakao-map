@@ -67,7 +67,7 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
 
       (function (marker, place) {
         window.kakao.maps.event.addListener(marker, "click", () => {
-          displayPlaceInfo(place);
+          displayPlaceInfo(marker, place);
           getDistance(marker);
           map.panTo(new window.kakao.maps.LatLng(place.y, place.x));
         });
@@ -88,23 +88,6 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
     return marker;
   }
 
-  async function getDistance(marker) {
-    const currentPosition = await getCurrentPosition();
-    const markerPosition = marker.getPosition();
-    const polyline = new window.kakao.maps.Polyline({
-      path: [
-        new window.kakao.maps.LatLng(
-          currentPosition.latitude,
-          currentPosition.longitude
-        ),
-        new window.kakao.maps.LatLng(markerPosition.Ma, markerPosition.La),
-      ],
-    });
-
-    const distance = polyline.getLength();
-    return distance;
-  }
-
   function removeMarker() {
     for (let i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
@@ -112,18 +95,35 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
     markers.splice(0);
   }
 
-  function displayPlaceInfo(place) {
+  async function displayPlaceInfo(marker, place) {
     const closeOverlay = () => {
       overlay.setMap(null);
     };
-
-    const content = getOverlayContent(place, closeOverlay);
+    const distance = await getDistance(marker);
+    const content = getOverlayContent(place, closeOverlay, distance);
     const position = new window.kakao.maps.LatLng(place.y, place.x);
 
     overlay.setContent(content);
     overlay.setMap(map);
     overlay.setPosition(position);
   }
+};
+
+const getDistance = async (marker) => {
+  const currentPosition = await getCurrentPosition();
+  const markerPosition = marker.getPosition();
+  const polyline = new window.kakao.maps.Polyline({
+    path: [
+      new window.kakao.maps.LatLng(
+        currentPosition.latitude,
+        currentPosition.longitude
+      ),
+      new window.kakao.maps.LatLng(markerPosition.Ma, markerPosition.La),
+    ],
+  });
+
+  const distance = Math.round(polyline.getLength());
+  return distance;
 };
 
 const getMap = (setMap, mapRef, location) => {
