@@ -1,4 +1,15 @@
+import getGeolocation from "../utils/getGeolocation";
 import getOverlayContent from "../utils/getOverlayContent";
+
+export const getCurrentPosition = async () => {
+  const position = await getGeolocation();
+  const location = {
+    latitude: position.latitude,
+    longitude: position.longitude,
+  };
+
+  return location;
+};
 
 export const zoomIn = (map) => {
   const level = map.getLevel();
@@ -57,6 +68,7 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
       (function (marker, place) {
         window.kakao.maps.event.addListener(marker, "click", () => {
           displayPlaceInfo(place);
+          getDistance(marker);
           map.panTo(new window.kakao.maps.LatLng(place.y, place.x));
         });
       })(marker, place[i]);
@@ -74,6 +86,23 @@ export const getSearchMap = (map, overlay, search, setSearch) => {
     markers.push(marker);
 
     return marker;
+  }
+
+  async function getDistance(marker) {
+    const currentPosition = await getCurrentPosition();
+    const markerPosition = marker.getPosition();
+    const polyline = new window.kakao.maps.Polyline({
+      path: [
+        new window.kakao.maps.LatLng(
+          currentPosition.latitude,
+          currentPosition.longitude
+        ),
+        new window.kakao.maps.LatLng(markerPosition.Ma, markerPosition.La),
+      ],
+    });
+
+    const distance = polyline.getLength();
+    return distance;
   }
 
   function removeMarker() {

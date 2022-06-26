@@ -6,8 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import styled from "styled-components";
-import getMap from "../api/getMap";
-import getGeolocation from "../utils/getGeolocation";
+import getMap, { getCurrentPosition } from "../api/getMap";
 import Loader from "./Loader";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
@@ -45,12 +44,7 @@ const MapContainer = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           const data = async () => {
-            const position = await getGeolocation();
-            const location = {
-              latitude: position.latitude,
-              longitude: position.longitude,
-            };
-
+            const location = await getCurrentPosition();
             getMap(setMap, mapRef, location);
             setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
             setLoading(false);
