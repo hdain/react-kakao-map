@@ -60,7 +60,7 @@ const SearchForm = () => {
     (e) => {
       overlay.setMap(null);
       getSearchMap(map, overlay, search, setSearch);
-      setPrevSearchPlaces((prev) => [search, ...prev]);
+      setPrevSearchPlaces((prev) => [...new Set([search, ...prev])]);
       setShow(false);
       e.preventDefault();
     },
