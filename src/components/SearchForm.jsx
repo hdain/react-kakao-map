@@ -1,7 +1,14 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import styled from "styled-components";
 import { getSearchMap } from "../api/getMap";
 import { MapContext } from "./MapContainer";
+import SearchHistory from "./SearchHistory";
 
 const Form = styled.form`
   position: fixed;
@@ -35,7 +42,12 @@ const Button = styled.button`
 
 const SearchForm = () => {
   const { map, overlay } = useContext(MapContext);
+  const historyRef = useRef(null);
+  const [show, setShow] = useState(false);
   const [search, setSearch] = useState("");
+  const [prevSearchPlaces, setPrevSearchPlaces] = useState(
+    JSON.parse(localStorage.getItem("searchPlaces") || "[]")
+  );
 
   const handleChange = useCallback(
     (e) => {
@@ -48,20 +60,63 @@ const SearchForm = () => {
     (e) => {
       overlay.setMap(null);
       getSearchMap(map, overlay, search, setSearch);
+      setPrevSearchPlaces((prev) => [search, ...prev]);
+      setShow(false);
       e.preventDefault();
     },
     [map, overlay, search, setSearch]
   );
 
+  const handleRemovePlace = useCallback(
+    (place) => {
+      const places = prevSearchPlaces.filter(
+        (removePlace) => removePlace !== place
+      );
+      setPrevSearchPlaces(places);
+    },
+    [prevSearchPlaces]
+  );
+
+  const handleClickOutside = useCallback(
+    (e) => {
+      if (
+        show &&
+        (!historyRef.current || !historyRef.current.contains(e.target))
+      )
+        setShow(false);
+    },
+    [show]
+  );
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
+  useEffect(() => {
+    localStorage.setItem("searchPlaces", JSON.stringify(prevSearchPlaces));
+  }, [prevSearchPlaces]);
+
   return (
-    <Form onSubmit={handleSubmit}>
-      <Input
-        type="text"
-        value={search}
-        onChange={handleChange}
-        placeholder="검색어를 입력해주세요"
-      />
-      <Button type="submit">🔍</Button>
+    <Form onSubmit={handleSubmit} ref={historyRef}>
+      <>
+        <Input
+          type="text"
+          value={search}
+          onChange={handleChange}
+          placeholder="검색어를 입력해주세요"
+          onClick={() => setShow(true)}
+        />
+        <Button type="submit">🔍</Button>
+      </>
+      {show && (
+        <SearchHistory
+          prevSearchPlaces={prevSearchPlaces}
+          handleRemovePlace={handleRemovePlace}
+        />
+      )}
     </Form>
   );
 };

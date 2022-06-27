@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { BsX } from "react-icons/bs";
+import SearchHistoryLi from "./SearchHistoryLi";
 
 const Container = styled.div`
   position: absolute;
@@ -24,45 +24,18 @@ const HistoryList = styled.ul`
   padding: 5px 0;
 `;
 
-const ListLi = styled.li`
-  padding: 5px 0;
-  font-size: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Button = styled.button`
-  background: none;
-  border: none;
-  font-size: 19px;
-  color: #777;
-  padding: 0;
-`;
-
-const SearchHistory = () => {
+const SearchHistory = ({ prevSearchPlaces, handleRemovePlace }) => {
   return (
     <Container>
       <HistoryTitle>최근 검색어</HistoryTitle>
       <HistoryList>
-        <ListLi>
-          <span>검색어1</span>
-          <Button>
-            <BsX />
-          </Button>
-        </ListLi>
-        <ListLi>
-          <span>검색어1</span>
-          <Button>
-            <BsX />
-          </Button>
-        </ListLi>
-        <ListLi>
-          <span>검색어1</span>
-          <Button>
-            <BsX />
-          </Button>
-        </ListLi>
+        {prevSearchPlaces.map((place) => (
+          <SearchHistoryLi
+            key={place}
+            place={place}
+            handleRemovePlace={handleRemovePlace}
+          />
+        ))}
       </HistoryList>
     </Container>
   );
