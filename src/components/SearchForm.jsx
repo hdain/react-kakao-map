@@ -113,6 +113,9 @@ const SearchForm = () => {
       </>
       {show && (
         <SearchHistory
+          setSearch={setSearch}
+          setShow={setShow}
+          setPrevSearchPlaces={setPrevSearchPlaces}
           prevSearchPlaces={prevSearchPlaces}
           handleRemovePlace={handleRemovePlace}
         />

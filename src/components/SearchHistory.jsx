@@ -24,7 +24,13 @@ const HistoryList = styled.ul`
   padding: 5px 0;
 `;
 
-const SearchHistory = ({ prevSearchPlaces, handleRemovePlace }) => {
+const SearchHistory = ({
+  prevSearchPlaces,
+  handleRemovePlace,
+  setSearch,
+  setShow,
+  setPrevSearchPlaces,
+}) => {
   return (
     <Container>
       <HistoryTitle>최근 검색어</HistoryTitle>
@@ -33,6 +39,9 @@ const SearchHistory = ({ prevSearchPlaces, handleRemovePlace }) => {
           <SearchHistoryLi
             key={place}
             place={place}
+            setSearch={setSearch}
+            setShow={setShow}
+            setPrevSearchPlaces={setPrevSearchPlaces}
             handleRemovePlace={handleRemovePlace}
           />
         ))}
