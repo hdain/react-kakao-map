@@ -45,6 +45,7 @@ const markers = [];
 
 export const getSearchMap = (map, overlay, search, setSearch) => {
   if (search === "") return;
+  overlay.setMap(null);
   removeMarker();
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(search, placesSearchCB);
