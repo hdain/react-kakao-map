@@ -6,8 +6,8 @@ import React, {
   useRef,
 } from "react";
 import styled from "styled-components";
-import { getSearchMap } from "../api/getMap";
-import { MapContext } from "./MapContainer";
+import { getSearchMap } from "../../api/getMap";
+import { MapContext } from "../MapContainer";
 import SearchHistory from "./SearchHistory";
 
 const Form = styled.form`

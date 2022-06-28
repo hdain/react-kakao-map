@@ -21,7 +21,7 @@ const HistoryTitle = styled.div`
 
 const HistoryList = styled.ul`
   margin: 0;
-  padding: 5px 0;
+  padding: 10px 0 5px;
 `;
 
 const SearchHistory = ({

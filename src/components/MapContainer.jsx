@@ -10,7 +10,7 @@ import getMap, { getCurrentPosition } from "../api/getMap";
 import Loader from "./Loader";
 import MapTypeControl from "./MapTypeControl";
 import MapZoomControl from "./MapZoomControl";
-import SearchForm from "./SearchForm";
+import SearchForm from "./Search/SearchForm";
 
 export const MapContext = createContext({ map: {}, overlay: {} });
 

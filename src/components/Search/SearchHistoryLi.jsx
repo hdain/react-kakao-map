@@ -1,27 +1,39 @@
 import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { BsX } from "react-icons/bs";
-import { getSearchMap } from "../api/getMap";
-import { MapContext } from "./MapContainer";
+import { BsX, BsGeoAltFill } from "react-icons/bs";
+import { getSearchMap } from "../../api/getMap";
+import { MapContext } from "../MapContainer";
 
 const ListLi = styled.li`
-  padding: 5px 0;
-  font-size: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
+const Text = styled.a`
+  display: flex;
+  align-items: flex-start;
+  font-size: 15px;
+  padding: 7px 0;
+  text-decoration: none;
+  color: #999;
+  flex-grow: 1;
+`;
+
 const PlaceName = styled.span`
   cursor: pointer;
+  padding-left: 9px;
+  color: #000;
 `;
 
 const Button = styled.button`
+  display: flex;
   background: none;
   border: none;
   font-size: 19px;
   color: #777;
   padding: 0;
+  vertical-align: middle;
   cursor: pointer;
 `;
 
@@ -43,7 +55,10 @@ const SearchHistoryLi = ({
 
   return (
     <ListLi>
-      <PlaceName onClick={handleClickSearch}>{place}</PlaceName>
+      <Text href="#" onClick={handleClickSearch}>
+        <BsGeoAltFill />
+        <PlaceName>{place}</PlaceName>
+      </Text>
       <Button onClick={() => handleRemovePlace(place)}>
         <BsX />
       </Button>
