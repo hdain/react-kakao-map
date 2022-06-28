@@ -122,7 +122,10 @@ const getDistance = async (marker) => {
     ],
   });
 
-  const distance = Math.round(polyline.getLength());
+  let distance = Math.round(polyline.getLength());
+  if (distance >= 1000) distance = (distance / 1000).toFixed(1) + "km";
+  else distance += "m";
+
   return distance;
 };
 

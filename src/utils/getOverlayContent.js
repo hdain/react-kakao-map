@@ -23,7 +23,7 @@ const getOverlayContent = (place, closeOverlay, length) => {
   address.append(place.address_name);
   const distance = document.createElement("span");
   distance.className = "distance";
-  distance.append(length + "m");
+  distance.append(length);
   const phone = document.createElement("span");
   phone.className = "phone";
   phone.append(place.phone);
