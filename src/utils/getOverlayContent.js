@@ -27,9 +27,14 @@ const getOverlayContent = (place, closeOverlay, length) => {
   const phone = document.createElement("span");
   phone.className = "phone";
   phone.append(place.phone);
+  const link = document.createElement("a");
+  const url = `https://map.kakao.com/link/to/${place.id}`;
+  link.className = "link";
+  link.href = url;
+  link.append("길찾기");
   const etc = document.createElement("p");
   etc.className = "etc";
-  etc.append(distance, phone);
+  etc.append(distance, phone, link);
   inner.append(title, roadAddress, address, etc);
   content.append(closeBtn, inner);
 

@@ -4,9 +4,12 @@ body {
 }
 
 ul,
-li,
-a {
+li {
   list-style: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 .info-window {
@@ -94,4 +97,10 @@ a {
 
 .info-window .content .etc .phone {
   color: #288833;
+}
+
+.info-window .content .etc .link {
+  float: right;
+  color: #1e3fa1;
+  font-weight: bold;
 }
