@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   position: absolute;
@@ -32,12 +32,12 @@ const Spinner = styled.div`
   }
 `;
 
-const Loader = () => {
+function Loader() {
   return (
     <Container>
       <Spinner />
     </Container>
   );
-};
+}
 
 export default Loader;

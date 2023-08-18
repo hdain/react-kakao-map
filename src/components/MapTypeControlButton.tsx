@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
 const Button = styled.button`
   border: none;
@@ -19,7 +19,8 @@ const Button = styled.button`
   }
 `;
 
-const MapTypeControlButton = ({ button, handleTypeChange }) => {
+function MapTypeControlButton(props: any) {
+  const { button, handleTypeChange } = props;
   const [active, setActive] = useState(false);
 
   return (
@@ -29,11 +30,11 @@ const MapTypeControlButton = ({ button, handleTypeChange }) => {
         handleTypeChange(button.type);
         setActive(!active);
       }}
-      className={active ? "active" : ""}
+      className={active ? 'active' : ''}
     >
       {button && <button.icon />}
     </Button>
   );
-};
+}
 
 export default MapTypeControlButton;

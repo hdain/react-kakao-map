@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0bc54ba8-5f33-4148-b47e-89e35946ef76" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/getMap.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Loader.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MapContainer.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MapTypeControl.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MapTypeControlButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MapZoomControl.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Search/SearchForm.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Search/SearchHistory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Search/SearchHistoryLi.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/getGeolocation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/getOverlayContent.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/getMap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Loader.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapContainer.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapTypeControl.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapTypeControlButton.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapZoomControl.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Search/SearchForm.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Search/SearchHistory.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Search/SearchHistoryLi.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/getGeolocation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/getOverlayContent.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2TVlrrpFbFLZj7dW1pcWM9cOYYB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;js.linters.configure.manually.selectedeslint&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dani/Documents/dev/react-kakao-map&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;/Users/dani/Documents/dev/react-kakao-map/node_modules/eslint&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/dani/Documents/dev/react-kakao-map/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/dani/Documents/dev/react-kakao-map/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/types/kakao.map" />
+      <recent name="$PROJECT_DIR$/types" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0bc54ba8-5f33-4148-b47e-89e35946ef76" name="Changes" comment="" />
+      <created>1691136330828</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691136330828</updated>
+      <workItem from="1691136331985" duration="682000" />
+      <workItem from="1691720723260" duration="14610000" />
+      <workItem from="1692152415913" duration="7836000" />
+      <workItem from="1692165492947" duration="10387000" />
+      <workItem from="1692237002393" duration="720000" />
+      <workItem from="1692237728766" duration="6832000" />
+      <workItem from="1692246804278" duration="27619000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/@types/index.d.ts</url>
+          <line>6</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
