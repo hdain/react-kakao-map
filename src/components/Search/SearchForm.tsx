@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { SearchKeyword } from '@types';
-import { getSearchMap } from '../../api/getMap';
+import { getSearchMap } from '../../api';
 import SearchHistory from './SearchHistory';
-import MapContext from '../../context/MapContext';
+import useMap from '../../hooks/useMap';
 
 const Form = styled.form`
   position: fixed;
@@ -36,7 +36,7 @@ const Button = styled.button`
 `;
 
 function SearchForm() {
-  const { map, overlay } = useContext(MapContext);
+  const kakaoMap = useMap();
   const historyRef = useRef<HTMLFormElement>(null);
   const [isShowSearchHistory, setIsShowSearchHistory] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState<SearchKeyword>('');
@@ -53,12 +53,12 @@ function SearchForm() {
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
-      getSearchMap(map, overlay, searchKeyword, setSearchKeyword);
+      getSearchMap(kakaoMap, searchKeyword, setSearchKeyword);
       setPrevSearchKeywords((prev) => [...new Set([searchKeyword, ...prev])]);
       setIsShowSearchHistory(false);
       e.preventDefault();
     },
-    [map, overlay, searchKeyword, setSearchKeyword],
+    [kakaoMap, searchKeyword],
   );
 
   const handleRemoveKeyword = useCallback(

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import MapContainer from './components/MapContainer';
+import { MapContainer } from './components';
 
 const Inner = styled.div`
   width: 100vw;

@@ -1,12 +1,12 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { RiTrafficLightLine } from 'react-icons/ri';
 import { BiLandscape } from 'react-icons/bi';
 import { BsBicycle } from 'react-icons/bs';
 import { OverlayMapTypeId } from '@types';
-import { addOverlayMapTypeId, removeOverlayMapTypeId } from '../api/getMap';
+import { addOverlayMapTypeId, removeOverlayMapTypeId } from '../api';
 import MapTypeControlButton from './MapTypeControlButton';
-import MapContext from '../context/MapContext';
+import useMap from '../hooks/useMap';
 
 const Wrap = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const list = [
 ];
 
 function MapTypeControl() {
-  const { map } = useContext(MapContext);
+  const { map } = useMap();
   const [type, setType] = useState<Array<OverlayMapTypeId>>([]);
 
   const handleTypeChange = useCallback(

@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { BsDashLg, BsPlusLg } from 'react-icons/bs';
-import { zoomIn, zoomOut } from '../api/getMap';
-import MapContext from '../context/MapContext';
+import { zoomIn, zoomOut } from '../api';
+import useMap from '../hooks/useMap';
 
 const Wrap = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ const Button = styled.button`
 `;
 
 function MapZoomControl() {
-  const { map } = useContext(MapContext);
+  const { map } = useMap();
 
   const handleZoomIn = useCallback(() => {
     zoomIn(map);

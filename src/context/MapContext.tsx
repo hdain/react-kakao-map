@@ -1,11 +1,16 @@
 import { createContext } from 'react';
-import { Map, Overlay } from '@types';
+import { Map, Marker, Overlay } from '@types';
 
-type MapContextType = {
+export interface KakaoMap {
   map: Map;
   overlay: Overlay;
-};
+  markers: Array<Marker>;
+}
 
-const MapContext = createContext<MapContextType>({ map: {}, overlay: {} });
+const MapContext = createContext<KakaoMap>({
+  map: {},
+  overlay: {},
+  markers: [],
+});
 
 export default MapContext;

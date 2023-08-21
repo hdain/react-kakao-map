@@ -1,17 +1,7 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import {
-  LatLng,
-  Map,
-  Marker,
-  Overlay,
-  OverlayMapTypeId,
-  Place,
-  SearchKeyword,
-  SearchResult,
-  SearchStatus,
-} from '@types';
-import getGeolocation from '../utils/getGeolocation';
-import getOverlayContent from '../utils/getOverlayContent';
+import { LatLng, Map, Marker, OverlayMapTypeId, Place, SearchKeyword, SearchResult, SearchStatus } from '@types';
+import { KakaoMap } from '../context';
+import { getGeolocation, getOverlayContent } from '../utils';
 
 export const zoomIn = (map: Map) => {
   const level = map.getLevel();
@@ -31,19 +21,13 @@ export const removeOverlayMapTypeId = (map: Map, type: OverlayMapTypeId) => {
   map.removeOverlayMapTypeId(window.kakao.maps.MapTypeId[type]);
 };
 
-export const getCurrentPosition = async () => {
-  const { latitude, longitude } = await getGeolocation();
-  return { latitude, longitude };
-};
+const getLatLng = (location: LatLng) => new window.kakao.maps.LatLng(location.latitude, location.longitude);
 
 const getDistance = async (marker: Marker): Promise<string> => {
-  const currentPosition = await getCurrentPosition();
+  const currentPosition = await getGeolocation();
   const markerPosition = marker.getPosition();
   const polyline = new window.kakao.maps.Polyline({
-    path: [
-      new window.kakao.maps.LatLng(currentPosition.latitude, currentPosition.longitude),
-      new window.kakao.maps.LatLng(markerPosition.latitude, markerPosition.longitude),
-    ],
+    path: [getLatLng(currentPosition), getLatLng(markerPosition)],
   });
 
   let distance = `${Math.round(polyline.getLength())}`;
@@ -53,66 +37,66 @@ const getDistance = async (marker: Marker): Promise<string> => {
   return distance;
 };
 
-const markers: Array<Marker> = [];
-
-const removeAllMarkers = () => {
-  markers.forEach((marker) => marker.setMap(null));
+const removeAllMarkers = (markers: Array<Marker>) => {
+  markers.forEach((marker: Marker) => marker.setMap(null));
   markers.splice(0);
 };
 
-const displayPlaceInfo = async (map: Map, overlay: Overlay, marker: Marker, place: Place) => {
+const displayPlaceInfo = async (kakaoMap: KakaoMap, marker: Marker, place: Place) => {
+  const { map, overlay } = kakaoMap;
   const closeOverlay = () => overlay.setMap(null);
   const distance = await getDistance(marker);
   const content = getOverlayContent(place, closeOverlay, distance);
-  const position = new window.kakao.maps.LatLng(+place.y, +place.x);
+  const position = getLatLng({ latitude: +place.y, longitude: +place.x });
 
   overlay.setContent(content);
   overlay.setMap(map);
   overlay.setPosition(position);
 };
 
-const getMarker = async (map: Map, overlay: Overlay, place: Place) => {
+const getMarker = async (kakaoMap: KakaoMap, place: Place) => {
+  const { map, markers } = kakaoMap;
   const marker = new window.kakao.maps.Marker({
     map,
-    position: new window.kakao.maps.LatLng(+place.y, +place.x),
+    position: getLatLng({ latitude: +place.y, longitude: +place.x }),
   });
 
   await (async () => {
     window.kakao.maps.event.addListener(marker, 'click', async () => {
-      await displayPlaceInfo(map, overlay, marker, place);
+      await displayPlaceInfo(kakaoMap, marker, place);
       await getDistance(marker);
-      map.panTo(new window.kakao.maps.LatLng(+place.y, +place.x));
+      map.panTo(getLatLng({ latitude: +place.y, longitude: +place.x }));
     });
   })();
 
   markers.push(marker);
 };
 
+const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult) => {
+  const { map } = kakaoMap;
+  const bounds = new window.kakao.maps.LatLngBounds();
+
+  result.forEach((place: Place) => {
+    getMarker(kakaoMap, place);
+    bounds.extend(getLatLng({ latitude: +place.y, longitude: +place.x }));
+  });
+
+  map.setBounds(bounds);
+};
+
 export const getSearchMap = (
-  map: Map,
-  overlay: Overlay,
+  kakaoMap: KakaoMap,
   keyword: SearchKeyword,
   setSearch: Dispatch<SetStateAction<string>>,
 ) => {
-  if (keyword === '') return;
+  const { overlay, markers } = kakaoMap;
   overlay.setMap(null);
-  removeAllMarkers();
-
-  function displayPlace(result: SearchResult) {
-    const bounds = new window.kakao.maps.LatLngBounds();
-
-    result.forEach((place: Place) => {
-      getMarker(map, overlay, place);
-      bounds.extend(new window.kakao.maps.LatLng(+place.y, +place.x));
-    });
-
-    map.setBounds(bounds);
-  }
+  removeAllMarkers(markers);
 
   function placesSearchCB(result: SearchResult, status: SearchStatus) {
     if (status === 'OK') {
       setSearch(keyword);
-      displayPlace(result);
+      displayPlaces(kakaoMap, result);
     } else if (status === 'ZERO_RESULT') {
       setSearch('');
       alert('검색 결과가 존재하지 않습니다.');
@@ -123,18 +107,19 @@ export const getSearchMap = (
   ps.keywordSearch(keyword, placesSearchCB);
 };
 
-const getMap = (
+export const getMap = (
   setMap: Dispatch<SetStateAction<Map | undefined>>,
   mapRef: MutableRefObject<null>,
   location: LatLng,
 ) => {
   const options = {
-    center: new window.kakao.maps.LatLng(location.latitude, location.longitude),
+    center: getLatLng(location),
     level: 3,
   };
 
-  const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
-  setMap(kakaoMap);
+  setMap({
+    map: new window.kakao.maps.Map(mapRef.current, options) || {},
+    overlay: new window.kakao.maps.CustomOverlay({ zIndex: 1 }) || {},
+    markers: [],
+  });
 };
-
-export default getMap;

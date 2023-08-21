@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styled from 'styled-components';
-import { Map } from '@types';
-import getMap, { getCurrentPosition } from '../api/getMap';
 import Loader from './Loader';
 import MapTypeControl from './MapTypeControl';
 import MapZoomControl from './MapZoomControl';
+import getCurrentLocation from '../utils/getGeolocation';
+import { getMap } from '../api';
+import { KakaoMap, MapContext } from '../context';
 import SearchForm from './Search/SearchForm';
-import MapContext from '../context/MapContext';
 
-const KakaoMap = styled.div`
+const KakaoMapContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
@@ -23,10 +23,12 @@ const MapControlView = styled.div`
 
 function MapContainer() {
   const mapRef = useRef(null);
-  const [map, setMap] = useState<Map>();
-  const [loading, setLoading] = useState(false);
-  const [overlay, setOverlay] = useState();
-  const value = useMemo(() => ({ map, overlay }), [map, overlay]);
+  const [kakaoMap, setKakaoMap] = useState<KakaoMap>({} as KakaoMap);
+  const [isLoading, setIsLoading] = useState(false);
+  const value = useMemo(
+    () => ({ map: kakaoMap.map, overlay: kakaoMap.overlay, markers: kakaoMap.markers }),
+    [kakaoMap],
+  );
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -34,28 +36,24 @@ function MapContainer() {
     document.head.appendChild(script);
 
     script.onload = () => {
-      setLoading(true);
+      setIsLoading(true);
       window.kakao.maps.load(() => {
         if (mapRef.current) {
-          const data = async () => {
-            const location = await getCurrentPosition();
-            getMap(setMap, mapRef, location);
-            setOverlay(new window.kakao.maps.CustomOverlay({ zIndex: 1 }));
-            setLoading(false);
-          };
-
-          data();
+          (async () => {
+            getMap(setKakaoMap, mapRef, await getCurrentLocation());
+            setIsLoading(false);
+          })();
         }
       });
     };
 
     return () => script.remove();
-  }, []);
+  }, [setKakaoMap]);
 
   return (
     <>
-      {loading ? <Loader /> : ''}
-      <KakaoMap id="map" ref={mapRef} />
+      {isLoading ? <Loader /> : ''}
+      <KakaoMapContainer id="map" ref={mapRef} />
       <MapContext.Provider value={value}>
         <SearchForm />
         <MapControlView>

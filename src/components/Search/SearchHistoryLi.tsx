@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useCallback, useContext } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import styled from 'styled-components';
 import { BsX, BsGeoAltFill } from 'react-icons/bs';
 import { SearchKeyword } from '@types';
-import { getSearchMap } from '../../api/getMap';
-import MapContext from '../../context/MapContext';
+import { getSearchMap } from '../../api';
+import { useMap } from '../../hooks';
 
 const ListLi = styled.li`
   display: flex;
@@ -50,13 +50,13 @@ export interface SearchHistoryLiProps {
 
 function SearchHistoryLi(props: SearchHistoryLiProps) {
   const { keyword, setSearchKeyword, setShow, setPrevSearchKeywords, onButtonClick } = props;
-  const { map, overlay } = useContext(MapContext);
+  const kakaoMap = useMap();
 
   const handleClickSearch = useCallback(() => {
-    getSearchMap(map, overlay, keyword, setSearchKeyword);
+    getSearchMap(kakaoMap, keyword, setSearchKeyword);
     setPrevSearchKeywords((prevKeywords: Array<SearchKeyword>) => [...new Set([keyword, ...prevKeywords])]);
     setShow(false);
-  }, [map, overlay, keyword, setSearchKeyword, setShow, setPrevSearchKeywords]);
+  }, [kakaoMap, keyword, setSearchKeyword, setPrevSearchKeywords, setShow]);
 
   return (
     <ListLi>
