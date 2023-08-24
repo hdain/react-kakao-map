@@ -21,16 +21,16 @@ const Button = styled.button`
 
 function MapTypeControlButton(props: any) {
   const { button, handleTypeChange } = props;
-  const [active, setActive] = useState(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   return (
     <Button
       key={button.type}
       onClick={() => {
         handleTypeChange(button.type);
-        setActive(!active);
+        setIsActive(!isActive);
       }}
-      className={active ? 'active' : ''}
+      className={isActive ? 'active' : ''}
     >
       {button && <button.icon />}
     </Button>

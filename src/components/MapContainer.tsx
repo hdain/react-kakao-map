@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import Loader from './Loader';
 import MapTypeControl from './MapTypeControl';
 import MapZoomControl from './MapZoomControl';
-import getCurrentLocation from '../utils/getGeolocation';
 import { getMap } from '../api';
 import { KakaoMap, MapContext } from '../context';
 import SearchForm from './Search/SearchForm';
+import { useGeolocation } from '../hooks';
+import { useMapStore } from '../store';
 
 const KakaoMapContainer = styled.div`
   width: 100%;
@@ -23,8 +24,9 @@ const MapControlView = styled.div`
 
 function MapContainer() {
   const mapRef = useRef(null);
+  const location = useGeolocation();
   const [kakaoMap, setKakaoMap] = useState<KakaoMap>({} as KakaoMap);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const value = useMemo(
     () => ({ map: kakaoMap.map, overlay: kakaoMap.overlay, markers: kakaoMap.markers }),
     [kakaoMap],
@@ -40,7 +42,7 @@ function MapContainer() {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           (async () => {
-            getMap(setKakaoMap, mapRef, await getCurrentLocation());
+            getMap(setKakaoMap, mapRef, location);
             setIsLoading(false);
           })();
         }
@@ -48,11 +50,11 @@ function MapContainer() {
     };
 
     return () => script.remove();
-  }, [setKakaoMap]);
+  }, [setKakaoMap, location]);
 
   return (
     <>
-      {isLoading ? <Loader /> : ''}
+      {isLoading ? <Loader /> : null}
       <KakaoMapContainer id="map" ref={mapRef} />
       <MapContext.Provider value={value}>
         <SearchForm />

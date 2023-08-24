@@ -4,6 +4,7 @@ import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
 import SearchHistory from './SearchHistory';
 import useMap from '../../hooks/useMap';
+import { useGeolocation } from '../../hooks';
 
 const Form = styled.form`
   position: fixed;
@@ -37,6 +38,7 @@ const Button = styled.button`
 
 function SearchForm() {
   const kakaoMap = useMap();
+  const location = useGeolocation();
   const historyRef = useRef<HTMLFormElement>(null);
   const [isShowSearchHistory, setIsShowSearchHistory] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState<SearchKeyword>('');
@@ -53,12 +55,12 @@ function SearchForm() {
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
-      getSearchMap(kakaoMap, searchKeyword, setSearchKeyword);
+      getSearchMap(kakaoMap, searchKeyword, setSearchKeyword, location);
       setPrevSearchKeywords((prev) => [...new Set([searchKeyword, ...prev])]);
       setIsShowSearchHistory(false);
       e.preventDefault();
     },
-    [kakaoMap, searchKeyword],
+    [kakaoMap, searchKeyword, location],
   );
 
   const handleRemoveKeyword = useCallback(
@@ -104,9 +106,9 @@ function SearchForm() {
       {isShowSearchHistory && (
         <SearchHistory
           setSearchKeyword={setSearchKeyword}
-          setShow={setIsShowSearchHistory}
           setPrevSearchKeywords={setPrevSearchKeywords}
           prevSearchKeywords={prevSearchKeywords}
+          setIsShow={setIsShowSearchHistory}
           onButtonClick={handleRemoveKeyword}
         />
       )}

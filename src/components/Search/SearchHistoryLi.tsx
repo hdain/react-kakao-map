@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { BsX, BsGeoAltFill } from 'react-icons/bs';
 import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
-import { useMap } from '../../hooks';
+import { useGeolocation, useMap } from '../../hooks';
 
 const ListLi = styled.li`
   display: flex;
@@ -43,20 +43,21 @@ const Button = styled.button`
 export interface SearchHistoryLiProps {
   keyword: SearchKeyword;
   setSearchKeyword: Dispatch<SetStateAction<SearchKeyword>>;
-  setShow: (show: boolean) => void;
-  setPrevSearchKeywords: (keyword: (prev: Array<SearchKeyword>) => SearchKeyword[]) => void;
+  setPrevSearchKeywords: (keyword: (prev: Array<SearchKeyword>) => Array<SearchKeyword>) => void;
+  setIsShow: (show: boolean) => void;
   onButtonClick: (event: string) => void;
 }
 
 function SearchHistoryLi(props: SearchHistoryLiProps) {
-  const { keyword, setSearchKeyword, setShow, setPrevSearchKeywords, onButtonClick } = props;
+  const { keyword, setSearchKeyword, setIsShow, setPrevSearchKeywords, onButtonClick } = props;
   const kakaoMap = useMap();
+  const location = useGeolocation();
 
   const handleClickSearch = useCallback(() => {
-    getSearchMap(kakaoMap, keyword, setSearchKeyword);
+    getSearchMap(kakaoMap, keyword, setSearchKeyword, location);
     setPrevSearchKeywords((prevKeywords: Array<SearchKeyword>) => [...new Set([keyword, ...prevKeywords])]);
-    setShow(false);
-  }, [kakaoMap, keyword, setSearchKeyword, setPrevSearchKeywords, setShow]);
+    setIsShow(false);
+  }, [kakaoMap, keyword, setSearchKeyword, setPrevSearchKeywords, setIsShow, location]);
 
   return (
     <ListLi>

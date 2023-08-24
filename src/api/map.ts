@@ -1,7 +1,7 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { LatLng, Map, Marker, OverlayMapTypeId, Place, SearchKeyword, SearchResult, SearchStatus } from '@types';
 import { KakaoMap } from '../context';
-import { getGeolocation, getOverlayContent } from '../utils';
+import { getOverlayContent } from '../utils';
 
 export const zoomIn = (map: Map) => {
   const level = map.getLevel();
@@ -23,11 +23,10 @@ export const removeOverlayMapTypeId = (map: Map, type: OverlayMapTypeId) => {
 
 const getLatLng = (location: LatLng) => new window.kakao.maps.LatLng(location.latitude, location.longitude);
 
-const getDistance = async (marker: Marker): Promise<string> => {
-  const currentPosition = await getGeolocation();
+const getDistance = (currentLocation: LatLng, marker: Marker): string => {
   const markerPosition = marker.getPosition();
   const polyline = new window.kakao.maps.Polyline({
-    path: [getLatLng(currentPosition), getLatLng(markerPosition)],
+    path: [getLatLng(currentLocation), getLatLng(markerPosition)],
   });
 
   let distance = `${Math.round(polyline.getLength())}`;
@@ -42,10 +41,10 @@ const removeAllMarkers = (markers: Array<Marker>) => {
   markers.splice(0);
 };
 
-const displayPlaceInfo = async (kakaoMap: KakaoMap, marker: Marker, place: Place) => {
+const displayPlaceInfo = (kakaoMap: KakaoMap, marker: Marker, place: Place, currentLocation: LatLng) => {
   const { map, overlay } = kakaoMap;
   const closeOverlay = () => overlay.setMap(null);
-  const distance = await getDistance(marker);
+  const distance = getDistance(currentLocation, marker);
   const content = getOverlayContent(place, closeOverlay, distance);
   const position = getLatLng({ latitude: +place.y, longitude: +place.x });
 
@@ -54,17 +53,17 @@ const displayPlaceInfo = async (kakaoMap: KakaoMap, marker: Marker, place: Place
   overlay.setPosition(position);
 };
 
-const getMarker = async (kakaoMap: KakaoMap, place: Place) => {
+const getMarker = (kakaoMap: KakaoMap, place: Place, currentLocation: LatLng) => {
   const { map, markers } = kakaoMap;
   const marker = new window.kakao.maps.Marker({
     map,
     position: getLatLng({ latitude: +place.y, longitude: +place.x }),
   });
 
-  await (async () => {
-    window.kakao.maps.event.addListener(marker, 'click', async () => {
-      await displayPlaceInfo(kakaoMap, marker, place);
-      await getDistance(marker);
+  (() => {
+    window.kakao.maps.event.addListener(marker, 'click', () => {
+      displayPlaceInfo(kakaoMap, marker, place, currentLocation);
+      getDistance(currentLocation, marker);
       map.panTo(getLatLng({ latitude: +place.y, longitude: +place.x }));
     });
   })();
@@ -72,12 +71,12 @@ const getMarker = async (kakaoMap: KakaoMap, place: Place) => {
   markers.push(marker);
 };
 
-const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult) => {
+const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult, currentLocation: LatLng) => {
   const { map } = kakaoMap;
   const bounds = new window.kakao.maps.LatLngBounds();
 
   result.forEach((place: Place) => {
-    getMarker(kakaoMap, place);
+    getMarker(kakaoMap, place, currentLocation);
     bounds.extend(getLatLng({ latitude: +place.y, longitude: +place.x }));
   });
 
@@ -88,6 +87,7 @@ export const getSearchMap = (
   kakaoMap: KakaoMap,
   keyword: SearchKeyword,
   setSearch: Dispatch<SetStateAction<string>>,
+  currentLocation: LatLng,
 ) => {
   const { overlay, markers } = kakaoMap;
   overlay.setMap(null);
@@ -96,8 +96,10 @@ export const getSearchMap = (
   function placesSearchCB(result: SearchResult, status: SearchStatus) {
     if (status === 'OK') {
       setSearch(keyword);
-      displayPlaces(kakaoMap, result);
-    } else if (status === 'ZERO_RESULT') {
+      displayPlaces(kakaoMap, result, currentLocation);
+    }
+
+    if (status === 'ZERO_RESULT') {
       setSearch('');
       alert('검색 결과가 존재하지 않습니다.');
     }
