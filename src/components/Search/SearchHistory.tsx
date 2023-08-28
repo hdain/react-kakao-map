@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SearchKeyword } from '@types';
 import SearchHistoryLi, { SearchHistoryLiProps } from './SearchHistoryLi';
+import { useSearchHistory } from '../../hooks';
 
 const Container = styled.div`
   position: absolute;
@@ -25,19 +26,17 @@ const HistoryList = styled.ul`
   padding: 10px 0 5px;
 `;
 
-interface SearchHistoryProps extends Omit<SearchHistoryLiProps, 'keyword'> {
-  prevSearchKeywords: Array<SearchKeyword>;
-}
+type SearchHistoryProps = Omit<SearchHistoryLiProps, 'keyword'>;
 
 function SearchHistory(props: SearchHistoryProps) {
-  const { prevSearchKeywords, ...searchHistoryProps } = props;
+  const searchHistory = useSearchHistory();
 
   return (
     <Container>
       <HistoryTitle>최근 검색어</HistoryTitle>
       <HistoryList>
-        {prevSearchKeywords.map((keyword: SearchKeyword) => (
-          <SearchHistoryLi key={keyword} keyword={keyword} {...searchHistoryProps} />
+        {searchHistory.map((keyword: SearchKeyword) => (
+          <SearchHistoryLi key={keyword} keyword={keyword} {...props} />
         ))}
       </HistoryList>
     </Container>

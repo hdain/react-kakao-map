@@ -7,6 +7,11 @@ declare global {
 export type Map = any;
 export type Overlay = any;
 export type Marker = any;
+export type KakaoMap = {
+  map: Map;
+  overlay: Overlay;
+  markers: Array<Marker>;
+};
 
 export type OverlayMapTypeId = 'TRAFFIC' | 'BICYCLE' | 'TERRAIN';
 export type SearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { BsDashLg, BsPlusLg } from 'react-icons/bs';
 import { zoomIn, zoomOut } from '../api';
-import useMap from '../hooks/useMap';
+import { useMap } from '../hooks';
 
 const Wrap = styled.div`
   display: flex;

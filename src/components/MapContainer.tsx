@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Loader from './Loader';
 import MapTypeControl from './MapTypeControl';
 import MapZoomControl from './MapZoomControl';
 import { getMap } from '../api';
-import { KakaoMap, MapContext } from '../context';
 import SearchForm from './Search/SearchForm';
-import { useGeolocation } from '../hooks';
-import { useMapStore } from '../store';
+import { useGeolocation, useSetMap } from '../hooks';
 
 const KakaoMapContainer = styled.div`
   width: 100%;
@@ -24,13 +22,9 @@ const MapControlView = styled.div`
 
 function MapContainer() {
   const mapRef = useRef(null);
+  const setMap = useSetMap();
   const location = useGeolocation();
-  const [kakaoMap, setKakaoMap] = useState<KakaoMap>({} as KakaoMap);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const value = useMemo(
-    () => ({ map: kakaoMap.map, overlay: kakaoMap.overlay, markers: kakaoMap.markers }),
-    [kakaoMap],
-  );
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -42,7 +36,7 @@ function MapContainer() {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           (async () => {
-            getMap(setKakaoMap, mapRef, location);
+            getMap(setMap, mapRef, location);
             setIsLoading(false);
           })();
         }
@@ -50,19 +44,17 @@ function MapContainer() {
     };
 
     return () => script.remove();
-  }, [setKakaoMap, location]);
+  }, [setMap, location]);
 
   return (
     <>
       {isLoading ? <Loader /> : null}
       <KakaoMapContainer id="map" ref={mapRef} />
-      <MapContext.Provider value={value}>
-        <SearchForm />
-        <MapControlView>
-          <MapTypeControl />
-          <MapZoomControl />
-        </MapControlView>
-      </MapContext.Provider>
+      <SearchForm />
+      <MapControlView>
+        <MapTypeControl />
+        <MapZoomControl />
+      </MapControlView>
     </>
   );
 }

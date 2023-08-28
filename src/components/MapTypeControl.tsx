@@ -6,7 +6,7 @@ import { BsBicycle } from 'react-icons/bs';
 import { OverlayMapTypeId } from '@types';
 import { addOverlayMapTypeId, removeOverlayMapTypeId } from '../api';
 import MapTypeControlButton from './MapTypeControlButton';
-import useMap from '../hooks/useMap';
+import { useMap } from '../hooks';
 
 const Wrap = styled.div`
   display: flex;

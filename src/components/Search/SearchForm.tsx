@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
 import SearchHistory from './SearchHistory';
-import useMap from '../../hooks/useMap';
-import { useGeolocation } from '../../hooks';
+import { useGeolocation, useMap, useAddSearchHistory } from '../../hooks';
 
 const Form = styled.form`
   position: fixed;
@@ -37,14 +36,12 @@ const Button = styled.button`
 `;
 
 function SearchForm() {
-  const kakaoMap = useMap();
+  const map = useMap();
   const location = useGeolocation();
   const historyRef = useRef<HTMLFormElement>(null);
+  const addSearchHistory = useAddSearchHistory();
   const [isShowSearchHistory, setIsShowSearchHistory] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState<SearchKeyword>('');
-  const [prevSearchKeywords, setPrevSearchKeywords] = useState<Array<SearchKeyword>>(
-    JSON.parse(localStorage.getItem('searchPlaces') || '[]'),
-  );
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,20 +52,12 @@ function SearchForm() {
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
-      getSearchMap(kakaoMap, searchKeyword, setSearchKeyword, location);
-      setPrevSearchKeywords((prev) => [...new Set([searchKeyword, ...prev])]);
+      getSearchMap(map, searchKeyword, setSearchKeyword, location);
+      addSearchHistory(searchKeyword);
       setIsShowSearchHistory(false);
       e.preventDefault();
     },
-    [kakaoMap, searchKeyword, location],
-  );
-
-  const handleRemoveKeyword = useCallback(
-    (keyword: SearchKeyword) => {
-      const filteredKeywords = prevSearchKeywords.filter((prevKeyword: SearchKeyword) => keyword !== prevKeyword);
-      setPrevSearchKeywords(filteredKeywords);
-    },
-    [prevSearchKeywords],
+    [map, searchKeyword, location, addSearchHistory],
   );
 
   const handleClickOutside = useCallback(
@@ -87,10 +76,6 @@ function SearchForm() {
     };
   }, [handleClickOutside]);
 
-  useEffect(() => {
-    localStorage.setItem('searchPlaces', JSON.stringify(prevSearchKeywords));
-  }, [prevSearchKeywords]);
-
   return (
     <Form onSubmit={handleSubmit} ref={historyRef}>
       <>
@@ -103,15 +88,7 @@ function SearchForm() {
         />
         <Button type="submit">🔍</Button>
       </>
-      {isShowSearchHistory && (
-        <SearchHistory
-          setSearchKeyword={setSearchKeyword}
-          setPrevSearchKeywords={setPrevSearchKeywords}
-          prevSearchKeywords={prevSearchKeywords}
-          setIsShow={setIsShowSearchHistory}
-          onButtonClick={handleRemoveKeyword}
-        />
-      )}
+      {isShowSearchHistory && <SearchHistory setSearchKeyword={setSearchKeyword} setIsShow={setIsShowSearchHistory} />}
     </Form>
   );
 }

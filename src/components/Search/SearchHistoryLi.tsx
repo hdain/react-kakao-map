@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { BsX, BsGeoAltFill } from 'react-icons/bs';
 import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
-import { useGeolocation, useMap } from '../../hooks';
+import { useRemoveSearchHistory, useGeolocation, useMap, useAddSearchHistory } from '../../hooks';
 
 const ListLi = styled.li`
   display: flex;
@@ -43,29 +43,40 @@ const Button = styled.button`
 export interface SearchHistoryLiProps {
   keyword: SearchKeyword;
   setSearchKeyword: Dispatch<SetStateAction<SearchKeyword>>;
-  setPrevSearchKeywords: (keyword: (prev: Array<SearchKeyword>) => Array<SearchKeyword>) => void;
   setIsShow: (show: boolean) => void;
-  onButtonClick: (event: string) => void;
 }
 
 function SearchHistoryLi(props: SearchHistoryLiProps) {
-  const { keyword, setSearchKeyword, setIsShow, setPrevSearchKeywords, onButtonClick } = props;
-  const kakaoMap = useMap();
+  const { keyword, setIsShow, setSearchKeyword } = props;
+  const map = useMap();
   const location = useGeolocation();
+  const addSearchHistory = useAddSearchHistory();
+  const removeSearchHistory = useRemoveSearchHistory();
 
-  const handleClickSearch = useCallback(() => {
-    getSearchMap(kakaoMap, keyword, setSearchKeyword, location);
-    setPrevSearchKeywords((prevKeywords: Array<SearchKeyword>) => [...new Set([keyword, ...prevKeywords])]);
-    setIsShow(false);
-  }, [kakaoMap, keyword, setSearchKeyword, setPrevSearchKeywords, setIsShow, location]);
+  const handleClickKeyword = useCallback(
+    (e: React.MouseEvent) => {
+      getSearchMap(map, keyword, setSearchKeyword, location);
+      addSearchHistory(keyword);
+      setIsShow(false);
+      e.preventDefault();
+    },
+    [map, keyword, setSearchKeyword, location, addSearchHistory, setIsShow],
+  );
+
+  const handleRemoveKeyword = useCallback(
+    (removeKeyword: SearchKeyword) => {
+      removeSearchHistory(removeKeyword);
+    },
+    [removeSearchHistory],
+  );
 
   return (
     <ListLi>
-      <Text onClick={handleClickSearch}>
+      <Text onClick={handleClickKeyword}>
         <BsGeoAltFill />
         <KeywordName>{keyword}</KeywordName>
       </Text>
-      <Button onClick={() => onButtonClick(keyword)}>
+      <Button onClick={() => handleRemoveKeyword(keyword)}>
         <BsX />
       </Button>
     </ListLi>

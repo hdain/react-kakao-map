@@ -1,2 +1,3 @@
-export { default as useMap } from './useMap';
+export * from './useMap';
+export * from './useSearchHistory';
 export { default as useGeolocation } from './useGeolocation';

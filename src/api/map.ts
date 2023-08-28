@@ -1,6 +1,15 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { LatLng, Map, Marker, OverlayMapTypeId, Place, SearchKeyword, SearchResult, SearchStatus } from '@types';
-import { KakaoMap } from '../context';
+import {
+  KakaoMap,
+  LatLng,
+  Map,
+  Marker,
+  OverlayMapTypeId,
+  Place,
+  SearchKeyword,
+  SearchResult,
+  SearchStatus,
+} from '@types';
 import { getOverlayContent } from '../utils';
 
 export const zoomIn = (map: Map) => {
@@ -86,7 +95,7 @@ const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult, currentLocation
 export const getSearchMap = (
   kakaoMap: KakaoMap,
   keyword: SearchKeyword,
-  setSearch: Dispatch<SetStateAction<string>>,
+  setSearchKeyword: Dispatch<SetStateAction<string>>,
   currentLocation: LatLng,
 ) => {
   const { overlay, markers } = kakaoMap;
@@ -95,12 +104,12 @@ export const getSearchMap = (
 
   function placesSearchCB(result: SearchResult, status: SearchStatus) {
     if (status === 'OK') {
-      setSearch(keyword);
+      setSearchKeyword(keyword);
       displayPlaces(kakaoMap, result, currentLocation);
     }
 
     if (status === 'ZERO_RESULT') {
-      setSearch('');
+      setSearchKeyword('');
       alert('검색 결과가 존재하지 않습니다.');
     }
   }
@@ -109,11 +118,7 @@ export const getSearchMap = (
   ps.keywordSearch(keyword, placesSearchCB);
 };
 
-export const getMap = (
-  setMap: Dispatch<SetStateAction<Map | undefined>>,
-  mapRef: MutableRefObject<null>,
-  location: LatLng,
-) => {
+export const getMap = (setMap: any, mapRef: MutableRefObject<null>, location: LatLng) => {
   const options = {
     center: getLatLng(location),
     level: 3,
@@ -122,6 +127,5 @@ export const getMap = (
   setMap({
     map: new window.kakao.maps.Map(mapRef.current, options) || {},
     overlay: new window.kakao.maps.CustomOverlay({ zIndex: 1 }) || {},
-    markers: [],
   });
 };

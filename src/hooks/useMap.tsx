@@ -1,14 +1,5 @@
-import { useContext } from 'react';
-import { MapContext } from '../context';
+import { shallow } from 'zustand/shallow';
+import { useMapStore } from '../store';
 
-const useMap = () => {
-  const map = useContext(MapContext);
-
-  if (!map) {
-    throw new Error('useMap must be used within a MapProvider');
-  }
-
-  return map;
-};
-
-export default useMap;
+export const useMap = () => useMapStore((state) => state.kakaoMap, shallow);
+export const useSetMap = () => useMapStore((state) => state.setKakaoMap);
