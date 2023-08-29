@@ -28,7 +28,9 @@ function MapContainer() {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAPS_API}&libraries=services,clusterer,drawing&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
+      import.meta.env.VITE_KAKAO_MAPS_API
+    }&libraries=services,clusterer,drawing&autoload=false`;
     document.head.appendChild(script);
 
     script.onload = () => {
