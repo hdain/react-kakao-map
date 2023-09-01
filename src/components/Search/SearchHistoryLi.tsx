@@ -1,44 +1,8 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
-import styled from 'styled-components';
 import { BsX, BsGeoAltFill } from 'react-icons/bs';
 import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
 import { useRemoveSearchHistory, useGeolocation, useMap, useAddSearchHistory } from '../../hooks';
-
-const ListLi = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Text = styled.button`
-  display: flex;
-  align-items: flex-start;
-  font-size: 15px;
-  padding: 7px 0;
-  background: none;
-  border: none;
-  color: #999;
-  flex-grow: 1;
-  cursor: pointer;
-`;
-
-const KeywordName = styled.span`
-  cursor: pointer;
-  padding-left: 9px;
-  color: #000;
-`;
-
-const Button = styled.button`
-  display: flex;
-  background: none;
-  border: none;
-  font-size: 19px;
-  color: #777;
-  padding: 0;
-  vertical-align: middle;
-  cursor: pointer;
-`;
 
 export interface SearchHistoryLiProps {
   keyword: SearchKeyword;
@@ -71,15 +35,23 @@ function SearchHistoryLi(props: SearchHistoryLiProps) {
   );
 
   return (
-    <ListLi>
-      <Text onClick={handleClickKeyword}>
+    <li className="flex items-center justify-between">
+      <button
+        type="button"
+        onClick={handleClickKeyword}
+        className="flex flex-grow cursor-pointer items-start items-center border-none bg-transparent px-0 text-base text-gray-600"
+      >
         <BsGeoAltFill />
-        <KeywordName>{keyword}</KeywordName>
-      </Text>
-      <Button onClick={() => handleRemoveKeyword(keyword)}>
+        <span className="cursor-pointer pl-2 text-black">{keyword}</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => handleRemoveKeyword(keyword)}
+        className="flex cursor-pointer items-center border-none bg-transparent p-0 text-xl text-gray-600"
+      >
         <BsX />
-      </Button>
-    </ListLi>
+      </button>
+    </li>
   );
 }
 

@@ -1,31 +1,12 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 import { BsDashLg, BsPlusLg } from 'react-icons/bs';
 import { zoomIn, zoomOut } from '../api';
 import { useMap } from '../hooks';
 
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-top: 15px;
-`;
-
-const Button = styled.button`
-  border: none;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  height: 50px;
-  cursor: pointer;
-  &:first-child {
-    margin-bottom: 6px;
-  }
-`;
-
 function MapZoomControl() {
   const { map } = useMap();
+  const buttonClasses =
+    'flex items-center justify-center border-none rounded-full bg-opacity-80 bg-black text-white h-14 cursor-pointer first:mb-2';
 
   const handleZoomIn = useCallback(() => {
     zoomIn(map);
@@ -36,14 +17,14 @@ function MapZoomControl() {
   }, [map]);
 
   return (
-    <Wrap>
-      <Button onClick={handleZoomIn}>
+    <div className="mt-4 flex flex-col overflow-hidden rounded">
+      <button type="button" onClick={handleZoomIn} className={buttonClasses}>
         <BsPlusLg />
-      </Button>
-      <Button onClick={handleZoomOut}>
+      </button>
+      <button type="button" onClick={handleZoomOut} className={buttonClasses}>
         <BsDashLg />
-      </Button>
-    </Wrap>
+      </button>
+    </div>
   );
 }
 

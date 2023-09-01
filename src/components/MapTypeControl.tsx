@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
 import { RiTrafficLightLine } from 'react-icons/ri';
 import { BiLandscape } from 'react-icons/bi';
 import { BsBicycle } from 'react-icons/bs';
@@ -7,14 +6,6 @@ import { OverlayMapTypeId } from '@types';
 import { addOverlayMapTypeId, removeOverlayMapTypeId } from '../api';
 import MapTypeControlButton from './MapTypeControlButton';
 import { useMap } from '../hooks';
-
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #777;
-  border-radius: 5px;
-  overflow: hidden;
-`;
 
 const list = [
   {
@@ -49,11 +40,11 @@ function MapTypeControl() {
   );
 
   return (
-    <Wrap>
+    <div className="flex flex-col overflow-hidden rounded border border-gray-300">
       {list.map((button) => (
         <MapTypeControlButton key={button.type} button={button} handleTypeChange={handleTypeChange} />
       ))}
-    </Wrap>
+    </div>
   );
 }
 

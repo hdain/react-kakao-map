@@ -1,39 +1,28 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 
-const Button = styled.button`
-  border: none;
-  background: #fff;
-  padding: 0;
-  height: 50px;
-  font-size: 25px;
-  cursor: pointer;
-  border-bottom: 1px solid #bbb;
-  transition: all 0.2s;
-  &:last-child {
-    border-bottom: none;
-  }
-  &.active {
-    background: #1e3fa1;
-    color: #fff;
-  }
-`;
+interface MapTypeControlButtonProps {
+  button: { type: string; icon: any };
+  handleTypeChange: (type: string) => void;
+}
 
-function MapTypeControlButton(props: any) {
+function MapTypeControlButton(props: MapTypeControlButtonProps) {
   const { button, handleTypeChange } = props;
   const [isActive, setIsActive] = useState<boolean>(false);
 
   return (
-    <Button
+    <button
       key={button.type}
+      type="button"
       onClick={() => {
         handleTypeChange(button.type);
         setIsActive(!isActive);
       }}
-      className={isActive ? 'active' : ''}
+      className={`flex h-14 cursor-pointer items-center justify-center border-none bg-white p-0 text-2xl transition duration-200 ${
+        isActive ? 'bg-blue-700 text-white' : ''
+      }`}
     >
       {button && <button.icon />}
-    </Button>
+    </button>
   );
 }
 

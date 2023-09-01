@@ -1,24 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import Loader from './Loader';
 import MapTypeControl from './MapTypeControl';
 import MapZoomControl from './MapZoomControl';
 import { getMap } from '../api';
 import SearchForm from './Search/SearchForm';
 import { useGeolocation, useSetMap } from '../hooks';
-
-const KakaoMapContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const MapControlView = styled.div`
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-  width: 50px;
-  z-index: 2;
-`;
 
 function MapContainer() {
   const mapRef = useRef(null);
@@ -51,12 +37,12 @@ function MapContainer() {
   return (
     <>
       {isLoading ? <Loader /> : null}
-      <KakaoMapContainer id="map" ref={mapRef} />
+      <div id="map" ref={mapRef} className="h-full w-full" />
       <SearchForm />
-      <MapControlView>
+      <div className="fixed bottom-10 right-10 z-20 w-14">
         <MapTypeControl />
         <MapZoomControl />
-      </MapControlView>
+      </div>
     </>
   );
 }
