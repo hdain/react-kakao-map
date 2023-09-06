@@ -1,106 +1,62 @@
-body {
-  margin: 0;
-  padding: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-ul,
-li {
-  list-style: none;
-}
+@layer components {
+  .info-window {
+    @apply absolute bottom-12 left-1/2 -translate-x-1/2 bg-white border border-gray-300 rounded-md;
+  }
 
-a {
-  text-decoration: none;
-}
+  .info-window:after,
+  .info-window:before {
+    @apply absolute content-[''] top-full left-1/2 w-0 h-0 border border-transparent pointer-events-none;
+  }
 
-.info-window {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  border: 1px solid #333;
-  border-radius: 5px;
-}
+  .info-window:after {
+    @apply border-transparent border-t-white border-8 -ml-2;
+  }
 
-.info-window:after,
-.info-window:before {
-  content: "";
-  top: 100%;
-  left: 50%;
-  border: solid transparent;
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
+  .info-window:before {
+    @apply border-transparent border-t-gray-300 border-8 -ml-2;
+  }
 
-.info-window:after {
-  border-color: rgba(255, 255, 255, 0);
-  border-top-color: #fff;
-  border-width: 8px;
-  margin-left: -8px;
-}
+  .info-window > button {
+    @apply absolute right-3 top-2.5 border-0 bg-none p-0 text-lg cursor-pointer;
+  }
 
-.info-window:before {
-  border-color: rgba(51, 51, 51, 0);
-  border-top-color: #333;
-  border-width: 9px;
-  margin-left: -9px;
-}
+  .content {
+    @apply p-3;
+  }
 
-.info-window > button {
-  position: absolute;
-  right: 12px;
-  top: 10px;
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0;
-}
+  .content > p {
+    @apply text-sm m-0 pt-1;
+  }
 
-.info-window .content {
-  padding: 13px;
-}
+  .title {
+    @apply block pr-6 pb-3 border-b border-gray-200;
+  }
 
-.info-window .content > p {
-  font-size: 14px;
-  margin: 0;
-  padding-top: 4px;
-}
+  .title .category {
+    @apply text-gray-900 text-xs align-middle pl-1;
+  }
 
-.info-window .content .title {
-  display: block;
-  padding-right: 25px;
-  padding-bottom: 13px;
-  border-bottom: 1px solid #ddd;
-}
+  .road-address {
+    @apply pt-3;
+  }
 
-.info-window .content .title .category {
-  color: #999;
-  font-size: 13px;
-  vertical-align: middle;
-  padding-left: 5px;
-}
+  .address {
+    @apply text-gray-900;
+  }
 
-.info-window .content .road-address {
-  padding-top: 13px;
-}
+  .etc .distance {
+    @apply mr-2;
+  }
 
-.info-window .content .address {
-  color: #999;
-}
+  .etc .phone {
+    @apply text-green-700;
+  }
 
-.info-window .content .etc .distance {
-  margin-right: 7px;
-}
-
-.info-window .content .etc .phone {
-  color: #288833;
-}
-
-.info-window .content .etc .link {
-  float: right;
-  color: #1e3fa1;
-  font-weight: bold;
+  .etc .link {
+    @apply float-right text-blue-700 font-bold;
+  }
 }
