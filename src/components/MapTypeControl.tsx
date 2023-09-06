@@ -42,7 +42,7 @@ function MapTypeControl() {
   return (
     <div className="flex flex-col overflow-hidden rounded border border-gray-300">
       {list.map((button) => (
-        <MapTypeControlButton key={button.type} button={button} handleTypeChange={handleTypeChange} />
+        <MapTypeControlButton key={button.type} button={button} onClick={handleTypeChange} />
       ))}
     </div>
   );

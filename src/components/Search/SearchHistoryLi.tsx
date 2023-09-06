@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { BsX, BsGeoAltFill } from 'react-icons/bs';
 import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
@@ -6,12 +6,11 @@ import { useRemoveSearchHistory, useGeolocation, useMap, useAddSearchHistory } f
 
 export interface SearchHistoryLiProps {
   keyword: SearchKeyword;
-  setSearchKeyword: Dispatch<SetStateAction<SearchKeyword>>;
   setIsShow: (show: boolean) => void;
 }
 
 function SearchHistoryLi(props: SearchHistoryLiProps) {
-  const { keyword, setIsShow, setSearchKeyword } = props;
+  const { keyword, setIsShow } = props;
   const map = useMap();
   const location = useGeolocation();
   const addSearchHistory = useAddSearchHistory();
@@ -19,12 +18,12 @@ function SearchHistoryLi(props: SearchHistoryLiProps) {
 
   const handleClickKeyword = useCallback(
     (e: React.MouseEvent) => {
-      getSearchMap(map, keyword, setSearchKeyword, location);
+      getSearchMap(map, keyword, location);
       addSearchHistory(keyword);
       setIsShow(false);
       e.preventDefault();
     },
-    [map, keyword, setSearchKeyword, location, addSearchHistory, setIsShow],
+    [map, keyword, location, addSearchHistory, setIsShow],
   );
 
   const handleRemoveKeyword = useCallback(

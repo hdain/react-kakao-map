@@ -1,2 +1,3 @@
 export { default as useMapStore } from './mapStore';
-export { default as searchHistoryStore } from './searchHistoryStore';
+export { default as useSearchStore } from './searchStore';
+export { default as useSearchHistoryStore } from './searchHistoryStore';

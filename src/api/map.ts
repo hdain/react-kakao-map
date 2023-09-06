@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import { MutableRefObject } from 'react';
 import {
   KakaoMap,
   LatLng,
@@ -7,10 +7,12 @@ import {
   OverlayMapTypeId,
   Place,
   SearchKeyword,
+  SearchPagination,
   SearchResult,
   SearchStatus,
 } from '@types';
 import { getOverlayContent } from '../utils';
+import { useMapStore, useSearchStore } from '../store';
 
 export const zoomIn = (map: Map) => {
   const level = map.getLevel();
@@ -35,7 +37,7 @@ const getLatLng = (location: LatLng) => new window.kakao.maps.LatLng(location.la
 const getDistance = (currentLocation: LatLng, marker: Marker): string => {
   const markerPosition = marker.getPosition();
   const polyline = new window.kakao.maps.Polyline({
-    path: [getLatLng(currentLocation), getLatLng(markerPosition)],
+    path: [getLatLng(currentLocation), markerPosition],
   });
 
   let distance = `${Math.round(polyline.getLength())}`;
@@ -92,17 +94,14 @@ const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult, currentLocation
   map.setBounds(bounds);
 };
 
-export const getSearchMap = (
-  kakaoMap: KakaoMap,
-  keyword: SearchKeyword,
-  setSearchKeyword: Dispatch<SetStateAction<string>>,
-  currentLocation: LatLng,
-) => {
+export const getSearchMap = (kakaoMap: KakaoMap, keyword: SearchKeyword, currentLocation: LatLng) => {
   const { overlay, markers } = kakaoMap;
   overlay.setMap(null);
   removeAllMarkers(markers);
 
-  function placesSearchCB(result: SearchResult, status: SearchStatus) {
+  function placesSearchCB(result: SearchResult, status: SearchStatus, pagination: SearchPagination) {
+    const { setSearchKeyword } = useSearchStore.getState();
+
     if (status === 'OK') {
       setSearchKeyword(keyword);
       displayPlaces(kakaoMap, result, currentLocation);
@@ -112,19 +111,26 @@ export const getSearchMap = (
       setSearchKeyword('');
       alert('검색 결과가 존재하지 않습니다.');
     }
+
+    if (status === 'ERROR') {
+      setSearchKeyword('');
+      alert('검색에 실패했습니다.');
+    }
+
+    useSearchStore.getState().setSearchResult({ places: result, pagination });
   }
 
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(keyword, placesSearchCB);
 };
 
-export const getMap = (setMap: any, mapRef: MutableRefObject<null>, location: LatLng) => {
+export const getMap = (mapRef: MutableRefObject<null>, location: LatLng) => {
   const options = {
     center: getLatLng(location),
     level: 3,
   };
 
-  setMap({
+  useMapStore.getState().setKakaoMap({
     map: new window.kakao.maps.Map(mapRef.current, options) || {},
     overlay: new window.kakao.maps.CustomOverlay({ zIndex: 1 }) || {},
   });
