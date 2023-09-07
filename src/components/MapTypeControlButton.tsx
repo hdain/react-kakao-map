@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { OverlayMapTypeId } from '@types';
+import { IconType } from 'react-icons';
 
 export interface MapTypeControlButtonProps {
-  button: { type: OverlayMapTypeId; icon: JSX.Element };
+  button: { type: OverlayMapTypeId; icon: IconType };
   onClick: (type: OverlayMapTypeId) => void;
 }
 
