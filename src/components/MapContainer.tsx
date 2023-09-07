@@ -4,11 +4,10 @@ import MapTypeControl from './MapTypeControl';
 import MapZoomControl from './MapZoomControl';
 import { getMap } from '../api';
 import SearchForm from './Search/SearchForm';
-import { useGeolocation, useSetMap } from '../hooks';
+import { useGeolocation } from '../hooks';
 
 function MapContainer() {
   const mapRef = useRef(null);
-  const setMap = useSetMap();
   const location = useGeolocation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -24,7 +23,7 @@ function MapContainer() {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           (async () => {
-            getMap(setMap, mapRef, location);
+            getMap(mapRef, location);
             setIsLoading(false);
           })();
         }
@@ -32,7 +31,7 @@ function MapContainer() {
     };
 
     return () => script.remove();
-  }, [setMap, location]);
+  }, [location]);
 
   return (
     <>

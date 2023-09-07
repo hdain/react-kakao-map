@@ -1,16 +1,16 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { SearchKeyword } from '@types';
 import { getSearchMap } from '../../api';
 import SearchHistory from './SearchHistory';
-import { useGeolocation, useMap, useAddSearchHistory } from '../../hooks';
+import { useGeolocation, useMap, useAddSearchHistory, useSearchKeyword, useSetSearchKeyword } from '../../hooks';
 
 function SearchForm() {
   const map = useMap();
   const location = useGeolocation();
+  const searchKeyword = useSearchKeyword();
+  const setSearchKeyword = useSetSearchKeyword();
   const historyRef = useRef<HTMLFormElement>(null);
   const addSearchHistory = useAddSearchHistory();
   const [isShowSearchHistory, setIsShowSearchHistory] = useState<boolean>(false);
-  const [searchKeyword, setSearchKeyword] = useState<SearchKeyword>('');
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ function SearchForm() {
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
-      getSearchMap(map, searchKeyword, setSearchKeyword, location);
+      getSearchMap(map, searchKeyword, location);
       addSearchHistory(searchKeyword);
       setIsShowSearchHistory(false);
       e.preventDefault();
@@ -65,7 +65,7 @@ function SearchForm() {
       >
         🔍
       </button>
-      {isShowSearchHistory && <SearchHistory setSearchKeyword={setSearchKeyword} setIsShow={setIsShowSearchHistory} />}
+      {isShowSearchHistory && <SearchHistory setIsShow={setIsShowSearchHistory} />}
     </form>
   );
 }

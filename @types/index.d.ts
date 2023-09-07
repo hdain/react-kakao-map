@@ -15,8 +15,9 @@ export type KakaoMap = {
 
 export type OverlayMapTypeId = 'TRAFFIC' | 'BICYCLE' | 'TERRAIN';
 export type SearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
-export type SearchResult = Array<Place>;
 export type SearchKeyword = string;
+export type SearchPagination = any;
+export type SearchResult = Array<Place> & SearchPagination;
 
 export interface LatLng {
   latitude: number;
