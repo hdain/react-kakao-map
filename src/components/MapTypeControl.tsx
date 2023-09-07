@@ -9,15 +9,15 @@ import { useMap } from '../hooks';
 
 const list = [
   {
-    type: 'BICYCLE',
+    type: 'BICYCLE' as OverlayMapTypeId,
     icon: BsBicycle,
   },
   {
-    type: 'TRAFFIC',
+    type: 'TRAFFIC' as OverlayMapTypeId,
     icon: RiTrafficLightLine,
   },
   {
-    type: 'TERRAIN',
+    type: 'TERRAIN' as OverlayMapTypeId,
     icon: BiLandscape,
   },
 ];
