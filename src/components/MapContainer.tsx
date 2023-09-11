@@ -23,7 +23,7 @@ function MapContainer() {
       window.kakao.maps.load(() => {
         if (mapRef.current) {
           (async () => {
-            getMap(mapRef, location);
+            getMap({ mapRef, location });
             setIsLoading(false);
           })();
         }

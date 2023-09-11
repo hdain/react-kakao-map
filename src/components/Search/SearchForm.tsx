@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { getSearchMap } from '../../api';
 import SearchHistory from './SearchHistory';
-import { useGeolocation, useMap, useAddSearchHistory, useSearchKeyword, useSetSearchKeyword } from '../../hooks';
+import { useGeolocation, useAddSearchHistory, useSearchKeyword, useSetSearchKeyword } from '../../hooks';
 
 function SearchForm() {
-  const map = useMap();
   const location = useGeolocation();
   const searchKeyword = useSearchKeyword();
   const setSearchKeyword = useSetSearchKeyword();
@@ -21,12 +20,12 @@ function SearchForm() {
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
-      getSearchMap(map, searchKeyword, location);
+      getSearchMap({ keyword: searchKeyword, location });
       addSearchHistory(searchKeyword);
       setIsShowSearchHistory(false);
       e.preventDefault();
     },
-    [map, searchKeyword, location, addSearchHistory],
+    [searchKeyword, location, addSearchHistory],
   );
 
   const handleClickOutside = useCallback(

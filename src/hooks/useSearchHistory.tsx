@@ -1,5 +1,6 @@
-import { useSearchHistoryStore } from '../store';
+import { shallow } from 'zustand/shallow';
+import { searchHistoryStore } from '../store';
 
-export const useSearchHistory = () => useSearchHistoryStore((state) => state.searchHistory);
-export const useAddSearchHistory = () => useSearchHistoryStore((state) => state.addSearchHistory);
-export const useRemoveSearchHistory = () => useSearchHistoryStore((state) => state.removeSearchHistory);
+export const useSearchHistory = () => searchHistoryStore((state) => state.searchHistory, shallow);
+export const useAddSearchHistory = () => searchHistoryStore((state) => state.addSearchHistory);
+export const useRemoveSearchHistory = () => searchHistoryStore((state) => state.removeSearchHistory);

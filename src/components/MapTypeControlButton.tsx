@@ -21,8 +21,8 @@ function MapTypeControlButton(props: MapTypeControlButtonProps) {
       key={button.type}
       type="button"
       onClick={handleClick}
-      className={`flex h-14 cursor-pointer items-center justify-center border-none bg-white p-0 text-2xl transition duration-200 ${
-        isActive ? 'bg-blue-700 text-white' : ''
+      className={`flex h-14 cursor-pointer items-center justify-center border-none p-0 text-2xl transition duration-200 ${
+        isActive ? 'bg-blue-700 text-white' : 'bg-white'
       }`}
     >
       {button && <button.icon />}

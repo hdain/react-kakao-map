@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .info-window {
-    @apply absolute bottom-12 left-1/2 -translate-x-1/2 bg-white border border-gray-300 rounded-md;
-  }
-
   .info-window:after,
   .info-window:before {
     @apply absolute content-[''] top-full left-1/2 w-0 h-0 border border-transparent pointer-events-none;
@@ -18,45 +14,5 @@
 
   .info-window:before {
     @apply border-transparent border-t-gray-300 border-8 -ml-2;
-  }
-
-  .info-window > button {
-    @apply absolute right-3 top-2.5 border-0 bg-none p-0 text-lg cursor-pointer;
-  }
-
-  .content {
-    @apply p-3;
-  }
-
-  .content > p {
-    @apply text-sm m-0 pt-1;
-  }
-
-  .title {
-    @apply block pr-6 pb-3 border-b border-gray-200;
-  }
-
-  .title .category {
-    @apply text-gray-900 text-xs align-middle pl-1;
-  }
-
-  .road-address {
-    @apply pt-3;
-  }
-
-  .address {
-    @apply text-gray-900;
-  }
-
-  .etc .distance {
-    @apply mr-2;
-  }
-
-  .etc .phone {
-    @apply text-green-700;
-  }
-
-  .etc .link {
-    @apply float-right text-blue-700 font-bold;
   }
 }

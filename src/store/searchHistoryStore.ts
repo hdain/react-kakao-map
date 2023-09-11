@@ -11,7 +11,7 @@ interface SearchHistoryActions {
   removeSearchHistory: (keyword: SearchKeyword) => void;
 }
 
-const useSearchHistoryStore = create<SearchHistoryState & SearchHistoryActions>()(
+const searchHistoryStore = create<SearchHistoryState & SearchHistoryActions>()(
   persist(
     (set, get) => ({
       searchHistory: [],
@@ -29,4 +29,4 @@ const useSearchHistoryStore = create<SearchHistoryState & SearchHistoryActions>(
   ),
 );
 
-export default useSearchHistoryStore;
+export default searchHistoryStore;

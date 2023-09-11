@@ -1,6 +1,6 @@
 import { shallow } from 'zustand/shallow';
-import { useSearchStore } from '../store';
+import { searchStore } from '../store';
 
-export const useSearchKeyword = () => useSearchStore((state) => state.searchKeyword);
-export const useSetSearchKeyword = () => useSearchStore((state) => state.setSearchKeyword);
-export const useSearchResult = () => useSearchStore((state) => state.searchResult, shallow);
+export const useSearchKeyword = () => searchStore((state) => state.searchKeyword);
+export const useSetSearchKeyword = () => searchStore((state) => state.setSearchKeyword);
+export const useSearchResult = () => searchStore((state) => state.searchResult, shallow);

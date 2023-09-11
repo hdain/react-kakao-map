@@ -11,7 +11,7 @@ interface SearchActions {
   setSearchResult: (result: SearchResult) => void;
 }
 
-const useSearchStore = create<SearchState & SearchActions>((set, get) => ({
+const searchStore = create<SearchState & SearchActions>((set, get) => ({
   searchKeyword: '',
   searchResult: {
     places: [],
@@ -21,4 +21,4 @@ const useSearchStore = create<SearchState & SearchActions>((set, get) => ({
   setSearchResult: (result: SearchResult) => set(() => ({ searchResult: { ...get().searchResult, ...result } })),
 }));
 
-export default useSearchStore;
+export default searchStore;

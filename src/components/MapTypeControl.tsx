@@ -5,7 +5,6 @@ import { BsBicycle } from 'react-icons/bs';
 import { OverlayMapTypeId } from '@types';
 import { addOverlayMapTypeId, removeOverlayMapTypeId } from '../api';
 import MapTypeControlButton from './MapTypeControlButton';
-import { useMap } from '../hooks';
 
 const list = [
   {
@@ -23,20 +22,19 @@ const list = [
 ];
 
 function MapTypeControl() {
-  const { map } = useMap();
   const [type, setType] = useState<Array<OverlayMapTypeId>>([]);
 
   const handleTypeChange = useCallback(
     (mapType: OverlayMapTypeId) => {
       setType((prev) => [...new Set([...prev, mapType])]);
       if (type.includes(mapType)) {
-        removeOverlayMapTypeId(map, mapType);
+        removeOverlayMapTypeId(mapType);
         setType((prev) => prev.filter((value) => value !== mapType));
       } else {
-        addOverlayMapTypeId(map, mapType);
+        addOverlayMapTypeId(mapType);
       }
     },
-    [map, type],
+    [type],
   );
 
   return (

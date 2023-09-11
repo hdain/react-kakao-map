@@ -1,8 +1,6 @@
 import { MutableRefObject } from 'react';
 import {
-  KakaoMap,
   LatLng,
-  Map,
   Marker,
   OverlayMapTypeId,
   Place,
@@ -12,32 +10,36 @@ import {
   SearchStatus,
 } from '@types';
 import { getOverlayContent } from '../utils';
-import { useMapStore, useSearchStore } from '../store';
+import { mapStore, searchStore } from '../store';
 
-export const zoomIn = (map: Map) => {
+export const zoomIn = () => {
+  const { map } = mapStore.getState().kakaoMap;
   const level = map.getLevel();
   map.setLevel(level - 1);
 };
 
-export const zoomOut = (map: Map) => {
+export const zoomOut = () => {
+  const { map } = mapStore.getState().kakaoMap;
   const level = map.getLevel();
   map.setLevel(level + 1);
 };
 
-export const addOverlayMapTypeId = (map: Map, type: OverlayMapTypeId) => {
+export const addOverlayMapTypeId = (type: OverlayMapTypeId) => {
+  const { map } = mapStore.getState().kakaoMap;
   map.addOverlayMapTypeId(window.kakao.maps.MapTypeId[type]);
 };
 
-export const removeOverlayMapTypeId = (map: Map, type: OverlayMapTypeId) => {
+export const removeOverlayMapTypeId = (type: OverlayMapTypeId) => {
+  const { map } = mapStore.getState().kakaoMap;
   map.removeOverlayMapTypeId(window.kakao.maps.MapTypeId[type]);
 };
 
 const getLatLng = (location: LatLng) => new window.kakao.maps.LatLng(location.latitude, location.longitude);
 
-const getDistance = (currentLocation: LatLng, marker: Marker): string => {
+const getDistance = (marker: Marker): string => {
   const markerPosition = marker.getPosition();
   const polyline = new window.kakao.maps.Polyline({
-    path: [getLatLng(currentLocation), markerPosition],
+    path: [getLatLng(mapStore.getState().location), markerPosition],
   });
 
   let distance = `${Math.round(polyline.getLength())}`;
@@ -47,25 +49,28 @@ const getDistance = (currentLocation: LatLng, marker: Marker): string => {
   return distance;
 };
 
-const removeAllMarkers = (markers: Array<Marker>) => {
+const removeAllMarkers = () => {
+  const { markers } = mapStore.getState().kakaoMap;
   markers.forEach((marker: Marker) => marker.setMap(null));
   markers.splice(0);
 };
 
-const displayPlaceInfo = (kakaoMap: KakaoMap, marker: Marker, place: Place, currentLocation: LatLng) => {
-  const { map, overlay } = kakaoMap;
-  const closeOverlay = () => overlay.setMap(null);
-  const distance = getDistance(currentLocation, marker);
-  const content = getOverlayContent(place, closeOverlay, distance);
+const displayPlaceInfo = ({ marker, place }: { marker: Marker; place: Place }) => {
+  const { map, overlay } = mapStore.getState().kakaoMap;
+  const distance = getDistance(marker);
+  const content = getOverlayContent({ place, distance });
   const position = getLatLng({ latitude: +place.y, longitude: +place.x });
 
   overlay.setContent(content);
   overlay.setMap(map);
   overlay.setPosition(position);
+
+  const closeBtn = document.getElementById(place.id);
+  closeBtn.onclick = () => overlay.setMap(null);
 };
 
-const getMarker = (kakaoMap: KakaoMap, place: Place, currentLocation: LatLng) => {
-  const { map, markers } = kakaoMap;
+const getMarker = (place: Place) => {
+  const { map, markers } = mapStore.getState().kakaoMap;
   const marker = new window.kakao.maps.Marker({
     map,
     position: getLatLng({ latitude: +place.y, longitude: +place.x }),
@@ -73,8 +78,8 @@ const getMarker = (kakaoMap: KakaoMap, place: Place, currentLocation: LatLng) =>
 
   (() => {
     window.kakao.maps.event.addListener(marker, 'click', () => {
-      displayPlaceInfo(kakaoMap, marker, place, currentLocation);
-      getDistance(currentLocation, marker);
+      displayPlaceInfo({ marker, place });
+      getDistance(marker);
       map.panTo(getLatLng({ latitude: +place.y, longitude: +place.x }));
     });
   })();
@@ -82,29 +87,30 @@ const getMarker = (kakaoMap: KakaoMap, place: Place, currentLocation: LatLng) =>
   markers.push(marker);
 };
 
-const displayPlaces = (kakaoMap: KakaoMap, result: SearchResult, currentLocation: LatLng) => {
-  const { map } = kakaoMap;
+const displayPlaces = (result: SearchResult) => {
+  const { map } = mapStore.getState().kakaoMap;
   const bounds = new window.kakao.maps.LatLngBounds();
 
   result.forEach((place: Place) => {
-    getMarker(kakaoMap, place, currentLocation);
+    getMarker(place);
     bounds.extend(getLatLng({ latitude: +place.y, longitude: +place.x }));
   });
 
   map.setBounds(bounds);
 };
 
-export const getSearchMap = (kakaoMap: KakaoMap, keyword: SearchKeyword, currentLocation: LatLng) => {
-  const { overlay, markers } = kakaoMap;
+export const getSearchMap = ({ keyword, location }: { keyword: SearchKeyword; location: LatLng }) => {
+  const { overlay } = mapStore.getState().kakaoMap;
+  mapStore.getState().setLocation(location);
   overlay.setMap(null);
-  removeAllMarkers(markers);
+  removeAllMarkers();
 
   function placesSearchCB(result: SearchResult, status: SearchStatus, pagination: SearchPagination) {
-    const { setSearchKeyword } = useSearchStore.getState();
+    const { setSearchKeyword } = searchStore.getState();
 
     if (status === 'OK') {
       setSearchKeyword(keyword);
-      displayPlaces(kakaoMap, result, currentLocation);
+      displayPlaces(result);
     }
 
     if (status === 'ZERO_RESULT') {
@@ -117,21 +123,23 @@ export const getSearchMap = (kakaoMap: KakaoMap, keyword: SearchKeyword, current
       alert('검색에 실패했습니다.');
     }
 
-    useSearchStore.getState().setSearchResult({ places: result, pagination });
+    searchStore.getState().setSearchResult({ places: result, pagination });
   }
 
   const ps = new window.kakao.maps.services.Places();
   ps.keywordSearch(keyword, placesSearchCB);
 };
 
-export const getMap = (mapRef: MutableRefObject<null>, location: LatLng) => {
+export const getMap = ({ mapRef, location }: { mapRef: MutableRefObject<null>; location: LatLng }) => {
   const options = {
     center: getLatLng(location),
     level: 3,
   };
 
-  useMapStore.getState().setKakaoMap({
+  mapStore.getState().setKakaoMap({
     map: new window.kakao.maps.Map(mapRef.current, options) || {},
     overlay: new window.kakao.maps.CustomOverlay({ zIndex: 1 }) || {},
   });
+
+  mapStore.getState().setLocation(location);
 };
